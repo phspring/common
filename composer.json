@@ -1,13 +1,9 @@
 {
     "name": "phspring/common",
-    "type": "library",
     "description": "Spring framework implementation in PHP",
     "keywords": ["dependency injection", "Inversion of Control", "annotation"],
-    "homepage": "http://www.phspring.org",
     "license": "MIT",
-    "authors": [
-        {"name": "Ferenc Lobozar", "email": "ferenc.lobozar@gmail.com"}
-    ],
+    "author": "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
     "require": {
         "php": ">=5.5",
         "doctrine/annotations": "1.*"
