@@ -78,7 +78,7 @@ class AccessControlHandler implements IAnnotationHandler {
         $throwFurther = true;
         foreach ($reflClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (Helper::getInstance()->hasAnnotation($method, ExceptionHandler::class)) {
-                $throwFurther &= MethodInvoker::invokeMethod($instance, $method->getName(), array());
+                $throwFurther &= MethodInvoker::invoke($instance, $method->getName(), array());
             }
         }
         if ($throwFurther) {

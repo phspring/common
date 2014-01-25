@@ -30,9 +30,6 @@ class Collection implements Iterator, ArrayAccess {
     public function __construct($annotations, Reflector $context) {
         $this->reflector = $context;
         $this->annotations = $annotations;
-//        foreach ($annotations as $annotation) {
-//            $this->annotations[get_class($annotation)] = $annotation;
-//        }
     }
 
     public function has($annotationClass) {
