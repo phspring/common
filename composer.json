@@ -9,6 +9,6 @@
         "doctrine/annotations": "1.*"
     },
     "autoload": {
-        "psr-0": { "PhSpring\\": "lib/" }
+        "psr-4": { "PhSpring\\": "lib/" }
     }
 }
