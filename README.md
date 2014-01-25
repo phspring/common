@@ -1,11 +1,7 @@
-# Doctrine Annotations
+# PhSpring library
 
-[![Build Status](https://travis-ci.org/doctrine/annotations.png?branch=master)](https://travis-ci.org/doctrine/annotations)
+[![Build Status](https://api.travis-ci.org/phspring/common.png?branch=master)](https://travis-ci.org/phspring/common)
 
-Docblock Annotations Parser library (extracted from Doctrine Common).
+This library try to implement few usefull annotations from the Java Spring framework.
 
-## Changelog
-
-### v1.1
-
-* Add Exception when ZendOptimizer+ or Opcache is configured to drop comments
+At this moment I'm working on the conceptions and on the documentations, Every commit try to be complete and error free. ;)
