@@ -61,8 +61,8 @@ class Helper extends AnnotationReader {
                 return $path;
             }
             try {
-                if (class_exists($path . NAMESPACE_SEPARATOR . $typeName)) {
-                    return $path . NAMESPACE_SEPARATOR . $typeName;
+                if (class_exists($path . '\\' . $typeName)) {
+                    return $path . '\\' . $typeName;
                 }
             } catch (\ErrorException $exc) {
                 

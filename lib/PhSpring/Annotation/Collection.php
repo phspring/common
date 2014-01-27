@@ -8,8 +8,7 @@
 
 namespace PhSpring\Annotation;
 
-use ArrayAccess;
-use Iterator;
+use ArrayObject;
 use Reflector;
 
 /**
@@ -17,9 +16,7 @@ use Reflector;
  *
  * @author lobiferi
  */
-class Collection implements Iterator, ArrayAccess {
-
-    private $annotations = array();
+class Collection extends ArrayObject {
 
     /**
      *
@@ -27,68 +24,15 @@ class Collection implements Iterator, ArrayAccess {
      */
     private $reflector;
 
-    public function __construct($annotations, Reflector $context) {
-        $this->reflector = $context;
-        $this->annotations = $annotations;
-    }
-
-    public function has($annotationClass) {
-        return array_key_exists($annotationClass, $this->annotations);
-    }
-
-    public function get($annotationClass) {
-        if ($this->has($annotationClass)) {
-            return $this->annotations[$annotationClass];
-        }
-        return null;
+    public function __construct(array $annotations, Reflector $reflector) {
+        parent::__construct($annotations);
+        $this->reflector = $reflector;
     }
 
     public function run($context) {
-        if (!empty($this->annotations)) {
-            foreach ($this->annotations as $annotation) {
-                Helper::getAnnotationHandler($annotation)->run($this->reflector, $context);
-            }
+        foreach ($this as $annotation) {
+            Helper::getAnnotationHandler($annotation)->run($this->reflector, $context);
         }
-    }
-
-    public function current() {
-        return current($this->annotations);
-    }
-
-    public function key() {
-        return key($this->annotations);
-    }
-
-    public function next() {
-        return next($this->annotations);
-    }
-
-    public function rewind() {
-        reset($this->annotations);
-    }
-
-    public function valid() {
-        return key($this->annotations) !== null;
-    }
-
-    public function offsetExists($offset) {
-        return $this->has($offset);
-    }
-
-    public function offsetGet($offset) {
-        return $this->get($offset);
-    }
-
-    public function offsetSet($offset, $value) {
-        $this->annotations[$offset] = $value;
-    }
-
-    public function offsetUnset($offset) {
-        unset($this->annotations[$offset]);
-    }
-    
-    public function copyToArray() {
-        return (array)$this->annotations;
     }
 
 }

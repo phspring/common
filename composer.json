@@ -6,7 +6,8 @@
     "author": "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
     "require": {
         "php": ">=5.5",
-        "doctrine/annotations": "1.*"
+        "doctrine/annotations": "1.*",
+        "doctrine/common": "dev-master"
     },
     "autoload": {
         "psr-4": { "PhSpring\\": "lib/" }

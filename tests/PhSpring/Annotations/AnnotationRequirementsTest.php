@@ -24,8 +24,7 @@ class AnnotationRequirementsTest extends PHPUnit_Framework_TestCase {
      * @test
      */
     public function checkInstanceOf() {
-        $iterator = new FilesystemIterator(preg_replace('/tests\\' . DIRECTORY_SEPARATOR . '/', '', __DIR__));
-        echo PHP_EOL . PHP_EOL . PHP_EOL;
+        $iterator = new FilesystemIterator(preg_replace('/tests\\' . DIRECTORY_SEPARATOR . '/', '/lib/', __DIR__));
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
                 $className = __NAMESPACE__ . '\\' . substr($fileinfo->getBasename(), 0, -4);
