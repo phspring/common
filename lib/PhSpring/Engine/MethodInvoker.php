@@ -30,7 +30,7 @@ class MethodInvoker {
         foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod, $annotations) as $methodAnnotationHandler) {
             $methodAnnotationHandler->run($reflMethod, $instance);
         }
-        $invokeParams = (new InvokeParameterHandler($annotations->copyToArray(), $reflMethod, $args))->run();
+        $invokeParams = (new InvokeParameterHandler($annotations, $reflMethod, $args))->run();
         return $reflMethod->invokeArgs($instance, $invokeParams);
     }
 

@@ -8,6 +8,7 @@
 
 namespace PhSpring\Engine\Handler;
 
+use PhSpring\Annotation\Collection;
 use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\RequestParam;
 use PhSpring\Engine\AnnotationAbstract;
@@ -25,7 +26,7 @@ use RuntimeException;
  */
 class InvokeParameterHandler {
 
-    /** @var array */
+    /** @var Collection */
     private $annotations;
 
     /** @var ReflectionMethod  */
@@ -43,7 +44,7 @@ class InvokeParameterHandler {
      * @param ReflectionMethod $reflMethod
      * @param array $args
      */
-    public function __construct(array $annotations, ReflectionMethod $reflMethod, array $args = null) {
+    public function __construct(Collection $annotations, ReflectionMethod $reflMethod, array $args = null) {
         $this->annotations = $annotations;
         $this->reflMethod = $reflMethod;
         $this->args = $args;
@@ -54,7 +55,7 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-        if ($this->hasAnnotation(Autowired::class)) {
+        if ($this->annotations->hasAnnotation(Autowired::class)) {
             foreach ($this->reflMethod->getParameters() as $parameter) {
                 $this->setupParameterValue($parameter);
             }
@@ -85,50 +86,6 @@ class InvokeParameterHandler {
     }
 
     /**
-     * @param string $annotationType name of the annotation class
-     * @return boolean
-     */
-    private function hasAnnotation($annotationType) {
-        foreach ($this->annotations as $annotation) {
-            if ($annotation instanceof $annotationType) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param type $annotationType name of the annotation class
-     * @param type $values extra annotation parameter to filter the result
-     * @return null|AnnotationAbstract
-     */
-    private function getAnnotation($annotationType, $values) {
-        foreach ($this->annotations as $annotation) {
-            if ($annotation instanceof $annotationType && $this->checkAnnotationByValue($annotation, $values)) {
-                return $annotation;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * 
-     * @param AnnotationAbstract $annotation
-     * @param array $values
-     * @return boolean
-     */
-    private function checkAnnotationByValue(AnnotationAbstract $annotation, array $values = null) {
-        $found = true;
-        if ($values !== null) {
-            foreach ($values as $key => $value) {
-                $found &= $annotation->$key == $value;
-            }
-        }
-        return !!$found;
-    }
-
-    /**
      * Return with the parameter type (string, int, ..., class name)
      * @param ReflectionParameter $parameter
      * @return null|string 
@@ -150,10 +107,9 @@ class InvokeParameterHandler {
      * @void
      */
     private function handleRequestParam(ReflectionParameter $parameter) {
-        $reflMethod = $parameter->getDeclaringFunction();
         $parameterName = $parameter->getName();
-        if ($this->hasAnnotation(RequestParam::class, array('value' => $parameterName))) {
-            $annotation = $this->getAnnotation(RequestParam::class, array('value' => $parameterName));
+        if ($this->annotations->hasAnnotation(RequestParam::class, array('value' => $parameterName))) {
+            $annotation = $this->annotations->getAnnotation(RequestParam::class, array('value' => $parameterName));
             $this->handleRequiredRequestParam($parameter, $annotation);
             $value = InvokerConfig::getRequestHelper()->getParam($parameterName);
             if ($annotation->defaultValue !== '****UNDEFINED****' && $value === null) {

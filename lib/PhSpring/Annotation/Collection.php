@@ -9,6 +9,7 @@
 namespace PhSpring\Annotation;
 
 use ArrayObject;
+use PhSpring\Engine\AnnotationAbstract;
 use Reflector;
 
 /**
@@ -34,5 +35,50 @@ class Collection extends ArrayObject {
             Helper::getAnnotationHandler($annotation)->run($this->reflector, $context);
         }
     }
+    /**
+     * @param string $annotationType name of the annotation class
+     * @return boolean
+     */
+    public function hasAnnotation($annotationType, array $values = null) {
+        foreach ($this as $annotation) {
+            if ($annotation instanceof $annotationType && $this->checkAnnotationByValue($annotation, $values)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * @param type $annotationType name of the annotation class
+     * @param type $values extra annotation parameter to filter the result
+     * @return null|AnnotationAbstract
+     */
+    public function getAnnotation($annotationType, array $values = null) {
+        foreach ($this as $annotation) {
+            if ($annotation instanceof $annotationType && $this->checkAnnotationByValue($annotation, $values)) {
+                return $annotation;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 
+     * @param AnnotationAbstract $annotation
+     * @param array $values
+     * @return boolean
+     */
+    private function checkAnnotationByValue(AnnotationAbstract $annotation, array $values = null) {
+        $found = true;
+        if ($values !== null) {
+            foreach ($values as $key => $value) {
+                $found &= $annotation->$key == $value;
+            }
+        }
+        return !!$found;
+    }
+    
+    
 
 }
