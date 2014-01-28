@@ -69,12 +69,10 @@ class InvokerConfig {
         if(is_object($annotationType)){
             $annotationType = get_class($annotationType);
         }
-        $annotationType = explode('\\', $annotationType);
-        $annotationType = end($annotationType);
+        $annotationType = substr($annotationType, strrpos($annotationType, '\\')+1);
         $found = false;
         foreach (self::$annptationHandlerNamespaces as $ns) {
             $handler = $ns . '\\'.$annotationType.'Handler';
-            $file = str_replace('\\', DIRECTORY_SEPARATOR, $handler.'.php');
             if(class_exists($handler)){
                 $found = $handler;
                 break;
