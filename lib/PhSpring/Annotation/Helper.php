@@ -44,6 +44,12 @@ class Helper {
     }
 
     public static function getPropertyType(ReflectionProperty $property) {
+        if (empty($property->getDocComment())) {
+            return null;
+        }
+        if (strpos($property->getDocComment(), '@var ') === false) {
+            return null;
+        }
         $typeName = preg_split('/\s/', substr($property->getDocComment(), strpos($property->getDocComment(), '@var ') + 5))[0];
         try {
             if (class_exists($typeName)) {
@@ -85,7 +91,7 @@ class Helper {
     }
 
     public static function hasAnnotation(Reflector $refl, $annotation, array $values = null) {
-            return self::getAnnotation($refl, $annotation, $values) !== null;
+        return self::getAnnotation($refl, $annotation, $values) !== null;
     }
 
     public static function getAnnotation(Reflector $refl, $annotationType, array $values = null) {
@@ -97,15 +103,15 @@ class Helper {
         $type = self::getReflectionType($refl);
         return self::{"get{$type}Annotations"}($refl);
     }
-    
-    private static function getReflectionType(\Reflector $refl){
-        if($refl instanceof ReflectionClass ){
+
+    private static function getReflectionType(\Reflector $refl) {
+        if ($refl instanceof ReflectionClass) {
             return 'Class';
         }
-        if($refl instanceof ReflectionMethod ){
+        if ($refl instanceof ReflectionMethod) {
             return 'Method';
         }
-        if($refl instanceof ReflectionProperty ){
+        if ($refl instanceof ReflectionProperty) {
             return 'Property';
         }
         throw new InvalidArgumentException("Not supported reflection type");

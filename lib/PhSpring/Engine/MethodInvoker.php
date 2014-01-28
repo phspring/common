@@ -20,17 +20,23 @@ use ReflectionClass;
  */
 class MethodInvoker {
 
-    public static function invoke($instance, $method, $args) {
-        $reflClass = new ReflectionClass(get_class($instance));
-        if (!$reflClass->hasMethod($method)) {
-            throw new BadMethodCallException();
+    public static function invoke($instance, $methodName, $args = array()) {
+        $className = get_class($instance);
+        $reflClass = new ReflectionClass($className);
+        if (!$reflClass->hasMethod($methodName)) {
+            throw new BadMethodCallException("The '{$methodName}' method is not exists in {$className}");
         }
-        $reflMethod = $reflClass->getMethod($method);
+        $reflMethod = $reflClass->getMethod($methodName);
         $annotations = AnnotationHelper::getAnnotations($reflMethod);
+
         foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod, $annotations) as $methodAnnotationHandler) {
             $methodAnnotationHandler->run($reflMethod, $instance);
         }
+        $expectedParameterSize = sizeof($reflMethod->getParameters());
         $invokeParams = (new InvokeParameterHandler($annotations, $reflMethod, $args))->run();
+        if ($expectedParameterSize > sizeof($invokeParams)) {
+            throw new BadMethodCallException("Not found all expected method parameter: {$className}::{$methodName}()");
+        }
         return $reflMethod->invokeArgs($instance, $invokeParams);
     }
 

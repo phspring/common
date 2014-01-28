@@ -3,6 +3,7 @@
 namespace PhSpring\Engine;
 
 use PHPUnit_Framework_TestCase;
+use PhSpring\Service\Collection;
 use PhSpring\TestFixtures\ClassInvokerFixture;
 use PhSpring\TestFixtures\Singleton;
 use ReflectionClass;
@@ -25,6 +26,7 @@ class ClassInvokerTest extends PHPUnit_Framework_TestCase {
      * @covers PhSpring\Engine\ClassInvoker::getNewInstance
      * @test
      * @expectedException RuntimeException
+     * @expectedExceptionMessage The constructor is not public in PhSpring\TestFixtures\Singleton class
      */
     public function theConstructorIsNotPublic() {
         ClassInvoker::getNewInstance(Singleton::class);
@@ -41,11 +43,21 @@ class ClassInvokerTest extends PHPUnit_Framework_TestCase {
     /**
      * @test
      */
-    public function validInvokeWithAutoviredProperty() {
+    public function validInvokeWithAutowiredProperty() {
+        Collection::add('SingletonTestService', Singleton::getInstance());
         $instance = ClassInvoker::getNewInstance(ClassInvokerFixture::class);
         $refl = new ReflectionProperty(ClassInvokerFixture::class, 'singleton');
         $refl->setAccessible(true);
         $this->assertTrue($refl->getValue($instance) instanceof Singleton);
+    }
+    
+    /**
+     * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The className parameter must be string or instanceof ReflectionClass
+     */
+    public function invokeWithObject() {
+        ClassInvoker::getNewInstance(new ClassInvokerFixture());
     }
     
     

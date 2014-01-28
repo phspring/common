@@ -9,10 +9,11 @@
 namespace PhSpring\Engine\Handler;
 
 use PhSpring\Annotation\Helper;
+use PhSpring\Engine\Constants;
 use PhSpring\Service\Helper as ServiceHelper;
-use PhSpring\Annotations\Qualifier;
 use ReflectionProperty;
 use Reflector;
+use RuntimeException;
 
 /**
  * Description of Autowired
@@ -29,22 +30,15 @@ class AutowiredHandler implements IAnnotationHandler {
     public function run(Reflector $refl, $context) {
         if ($refl instanceof ReflectionProperty) {
             $type = Helper::getPropertyType($refl);
-            $serviceName = $this->getServiceName($refl);
+            $isPrimitiveType = (in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
+            $serviceName = ServiceHelper::getServiceName($refl);
+            if(($type === null ||  $isPrimitiveType) && $serviceName === null){
+                throw new RuntimeException("Must set the property type by @var annotation or you must use @Quealifier annotation to define the service");
+            }
             $service = ServiceHelper::getService($type, $serviceName);
             $refl->setAccessible(true);
             $refl->setValue($context, $service);
         }
-    }
-
-    /**
-     * @param ReflectionProperty $refl
-     * @return string
-     */
-    public function getServiceName(ReflectionProperty $refl) {
-        if ($annotation = Helper::getAnnotation($refl, Qualifier::class)) {
-            return $annotation->getName();
-        }
-        return null;
     }
 
 }

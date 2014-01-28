@@ -8,9 +8,12 @@
 
 namespace PhSpring\Service;
 
-use Exception;
+use PhSpring\Annotation\Helper as AnnotationHelper;
+use PhSpring\Annotations\Qualifier;
 use PhSpring\Engine\ClassInvoker;
 use ReflectionClass;
+use ReflectionProperty;
+use RuntimeException;
 
 /**
  * Description of Helper
@@ -22,9 +25,13 @@ class Helper {
     public static function getService($type, $serviceName = null) {
         if (!empty($serviceName)) {
             $service = Collection::get($serviceName);
-            if($service == null){
-                throw new Exception("Not defined service! - name: '{$serviceName}'");
+            if ($service == null) {
+                throw new RuntimeException("Not defined service! - name: '{$serviceName}'");
             }
+            if($type !== null && !($service instanceof $type)){
+                throw new RuntimeException("Found service class mismatch with expected type! - name: '{$serviceName}' type: '{$type}'");
+            }
+            return $service;
         }
         $service = Collection::get($type);
         if ($service === null) {
@@ -39,6 +46,17 @@ class Helper {
             Collection::add($serviceName, $service);
         }
         return $service;
+    }
+
+    /**
+     * @param ReflectionProperty $refl
+     * @return string
+     */
+    public static function getServiceName(ReflectionProperty $refl) {
+        if ($annotation = AnnotationHelper::getAnnotation($refl, Qualifier::class)) {
+            return $annotation->value;
+        }
+        return null;
     }
 
 }

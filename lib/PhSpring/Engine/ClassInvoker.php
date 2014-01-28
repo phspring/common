@@ -28,6 +28,7 @@ class ClassInvoker {
      */
     public static function getNewInstanceByRefl(ReflectionClass $reflClass, array $params = null) {
         $instance = $reflClass->newInstanceWithoutConstructor();
+        $className = $reflClass->getName();
         foreach ($reflClass->getProperties() as $property) {
             if (AnnotationHelper::hasAnnotation($property, Autowired::class)) {
                 InvokerConfig::getAnnotationHandler(Autowired::class)->run($property, $instance);
@@ -38,7 +39,7 @@ class ClassInvoker {
             if ($reflClass->getMethod("__construct")->isPublic()) {
                 MethodInvoker::invoke($instance, '__construct', $params);
             } else {
-                throw new RuntimeException("The constructor is not public in " . $reflClass->getName() . ' class');
+                throw new RuntimeException("The constructor is not public in {$className} class");
             }
         }
         return $instance;

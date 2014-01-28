@@ -54,11 +54,11 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-        if ($this->annotations->hasAnnotation(Autowired::class)) {
-            foreach ($this->reflMethod->getParameters() as $parameter) {
-                $this->setupParameterValue($parameter);
-            }
+//        if ($this->annotations->hasAnnotation(Autowired::class)) {
+        foreach ($this->reflMethod->getParameters() as $parameter) {
+            $this->setupParameterValue($parameter);
         }
+//        }
         return $this->invokeParams;
     }
 
@@ -75,12 +75,15 @@ class InvokeParameterHandler {
         }
 
         $isPrimitiveType = (in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
+        if ($parameter->isOptional()) {
+            $this->invokeParams[$parameter->getPosition()] = $parameter->getDefaultValue();
+        }
+
+
         if ($isPrimitiveType || $type === null) {
             $this->handleRequestParam($parameter, $this->invokeParams);
         } elseif (!$isPrimitiveType && $type) {
             $this->invokeParams[$parameter->getPosition()] = ServiceHelper::getService($type);
-        } else {
-            $this->invokeParams[$parameter->getPosition()] = null;
         }
     }
 
