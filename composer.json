@@ -10,6 +10,6 @@
         "doctrine/common": "dev-master"
     },
     "autoload": {
-        "psr-4": { "PhSpring\\": "lib/" }
+        "psr-4": { "PhSpring\\": "lib/PhSpring/" }
     }
 }
