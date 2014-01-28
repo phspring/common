@@ -26,7 +26,7 @@ class MethodInvoker {
             throw new BadMethodCallException();
         }
         $reflMethod = $reflClass->getMethod($method);
-        $annotations = AnnotationHelper::getInstance()->getMethodAnnotations($reflMethod);
+        $annotations = AnnotationHelper::getAnnotations($reflMethod);
         foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod, $annotations) as $methodAnnotationHandler) {
             $methodAnnotationHandler->run($reflMethod, $instance);
         }

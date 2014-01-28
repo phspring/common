@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace PhSpring\Annotations\Handler;
+namespace PhSpring\Engine\Handler;
 
 /**
  * Description of IAnnotationHandler

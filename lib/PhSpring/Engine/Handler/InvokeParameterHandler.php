@@ -11,7 +11,6 @@ namespace PhSpring\Engine\Handler;
 use PhSpring\Annotation\Collection;
 use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\RequestParam;
-use PhSpring\Engine\AnnotationAbstract;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
 use PhSpring\Service\Helper as ServiceHelper;

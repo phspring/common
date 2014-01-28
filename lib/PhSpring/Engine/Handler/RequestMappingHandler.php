@@ -11,7 +11,6 @@ namespace PhSpring\Engine\Handler;
 use PhSpring\Annotations\ExpressionAnd;
 use PhSpring\Annotations\ExpressionNot;
 use PhSpring\Annotations\ExpressionOr;
-use PhSpring\Annotations\Handler\IAnnotationHandler;
 use PhSpring\Annotations\IExpression;
 use PhSpring\Annotations\RequestMethod;
 use PhSpring\Engine\ErrorCode;

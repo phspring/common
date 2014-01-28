@@ -10,6 +10,7 @@ namespace PhSpring\Annotation;
 
 use ArrayObject;
 use PhSpring\Engine\AnnotationAbstract;
+use PhSpring\Engine\InvokerConfig;
 use Reflector;
 
 /**
@@ -32,9 +33,10 @@ class Collection extends ArrayObject {
 
     public function run($context) {
         foreach ($this as $annotation) {
-            Helper::getAnnotationHandler($annotation)->run($this->reflector, $context);
+            InvokerConfig::getAnnotationHandler($annotation)->run($this->reflector, $context);
         }
     }
+
     /**
      * @param string $annotationType name of the annotation class
      * @return boolean
@@ -47,7 +49,7 @@ class Collection extends ArrayObject {
         }
         return false;
     }
-    
+
     /**
      * @param type $annotationType name of the annotation class
      * @param type $values extra annotation parameter to filter the result
@@ -78,7 +80,5 @@ class Collection extends ArrayObject {
         }
         return !!$found;
     }
-    
-    
 
 }

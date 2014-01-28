@@ -9,7 +9,7 @@
 namespace PhSpring\Engine;
 
 use PhSpring\Annotation\Helper as AnnotationHelper;
-use PhSpring\Annotations\Autowired as AutowiredAnnotation;
+use PhSpring\Annotations\Autowired;
 use ReflectionClass;
 
 /**
@@ -19,28 +19,11 @@ use ReflectionClass;
  */
 class ClassInvoker {
 
-    /**
-     *
-     * @var Phoore\Annotation\Helper
-     */
-    private static $helper;
-
-    /**
-     * 
-     * @return Phoore\Annotation\Helper
-     */
-    private static function getHelper() {
-        if (self::$helper === null) {
-            self::$helper = AnnotationHelper::getInstance();
-        }
-        return self::$helper;
-    }
-
     public static function getNewInstanceByRefl(ReflectionClass $reflClass, array $params = null) {
         $instance = $reflClass->newInstanceWithoutConstructor();
         foreach ($reflClass->getProperties() as $property) {
-            if (self::getHelper()->hasAnnotation($property, AutowiredAnnotation::class)) {
-                AnnotationHelper::getAnnotationHandler(AutowiredAnnotation::class)->run($property, $instance);
+            if (AnnotationHelper::hasAnnotation($property, Autowired::class)) {
+                AnnotationHelper::getAnnotationHandler(Autowired::class)->run($property, $instance);
             }
         }
 
@@ -53,5 +36,5 @@ class ClassInvoker {
     public static function getNewInstance($className, array $params = null) {
         return self::getNewInstanceByRefl(new ReflectionClass($className), $params);
     }
-
+    
 }

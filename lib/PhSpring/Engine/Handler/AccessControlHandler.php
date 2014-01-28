@@ -11,8 +11,6 @@ namespace PhSpring\Engine\Handler;
 use PhSpring\Annotation\Helper;
 use PhSpring\Annotations\AccessControl;
 use PhSpring\Annotations\ExceptionHandler;
-use PhSpring\Annotations\Autowired;
-use PhSpring\Annotations\Handler\IAnnotationHandler;
 use PhSpring\Engine\Exceptions\UnAuthorizedException;
 use PhSpring\Engine\IACLResource;
 use PhSpring\Engine\IAuth;
@@ -57,7 +55,7 @@ class AccessControlHandler implements IAnnotationHandler {
 
     public function run(Reflector $reflMethod, $instance) {
         try {
-            if (Helper::getInstance()->hasAnnotation($reflMethod, AccessControl::class)) {
+            if (Helper::hasAnnotation($reflMethod, AccessControl::class)) {
                 $this->handleAnnotation($reflMethod, $instance);
             }
         } catch (UnAuthorizedException $ex) {
@@ -66,7 +64,7 @@ class AccessControlHandler implements IAnnotationHandler {
     }
 
     private function handleAnnotation($reflMethod, $instance) {
-        $annotation = Helper::getInstance()->getMethodAnnotation($reflMethod, AccessControl::class);
+        $annotation = Helper::getAnnotation($reflMethod, AccessControl::class);
         $role = self::getRole();
         if (!$this->acl->isAllowed($role, $annotation->value)) {
             throw new UnAuthorizedException;
@@ -77,7 +75,7 @@ class AccessControlHandler implements IAnnotationHandler {
         $reflClass = new ReflectionClass($instance);
         $throwFurther = true;
         foreach ($reflClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (Helper::getInstance()->hasAnnotation($method, ExceptionHandler::class)) {
+            if (Helper::hasAnnotation($method, ExceptionHandler::class)) {
                 $throwFurther &= MethodInvoker::invoke($instance, $method->getName(), array());
             }
         }
