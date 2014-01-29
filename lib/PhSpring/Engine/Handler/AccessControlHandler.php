@@ -10,6 +10,7 @@ namespace PhSpring\Engine\Handler;
 
 use PhSpring\Annotation\Helper;
 use PhSpring\Annotations\AccessControl;
+use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\ExceptionHandler;
 use PhSpring\Engine\Exceptions\UnAuthorizedException;
 use PhSpring\Engine\IACLResource;
