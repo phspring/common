@@ -30,6 +30,10 @@ class HttpServletRequest implements RequestInterface{
         return self::$adapter;
     }
 
+    public static function setAdapter(RequestInterface $adapter) {
+        self::$adapter = $adapter;
+    }
+
     public function getParam($key, $default = null) {
         return $this->getAdapter()->getParam($key, $default);
     }

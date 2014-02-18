@@ -31,7 +31,7 @@ class InvokerConfig {
     private static $afterHandlers = array(
     );
     private static $requestHelper;
-    private static $annptationHandlerNamespaces = array('PhSpring\Engine\Handler');
+    private static $annotationHandlerNamespaces = array('PhSpring\Engine\Handler');
 
     public static function getMethodBeforeHandlers($reflMethod) {
         $ret = array();
@@ -62,29 +62,27 @@ class InvokerConfig {
     }
 
     public static function addAnnotationHandlerNamespace($namespace) {
-        array_unshift(self::$annptationHandlerNamespaces, $namespace);
+        array_unshift(self::$annotationHandlerNamespaces, $namespace);
     }
 
     public static function getAnnotationHandler($annotationType) {
-        if(is_object($annotationType)){
+        if (is_object($annotationType)) {
             $annotationType = get_class($annotationType);
         }
-        $annotationType = substr($annotationType, strrpos($annotationType, '\\')+1);
+        $annotationType = substr($annotationType, strrpos($annotationType, '\\') + 1);
         $found = false;
-        foreach (self::$annptationHandlerNamespaces as $ns) {
-            $handler = $ns . '\\'.$annotationType.'Handler';
-            if(class_exists($handler)){
+        foreach (self::$annotationHandlerNamespaces as $ns) {
+            $handler = $ns . '\\' . $annotationType . 'Handler';
+            if (class_exists($handler)) {
                 $found = $handler;
                 break;
             }
         }
-        if($found !== false){
+        if ($found !== false) {
             return ClassInvoker::getNewInstance($found);
-        }
-        else{
+        } else {
             return null;
         }
-        
     }
 
 }

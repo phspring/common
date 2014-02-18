@@ -31,7 +31,8 @@ class ClassInvoker {
         $className = $reflClass->getName();
         foreach ($reflClass->getProperties() as $property) {
             if (AnnotationHelper::hasAnnotation($property, Autowired::class)) {
-                InvokerConfig::getAnnotationHandler(Autowired::class)->run($property, $instance);
+                $annotation = AnnotationHelper::getAnnotation($property, Autowired::class);
+                InvokerConfig::getAnnotationHandler(get_class($annotation))->run($property, $instance);
             }
         }
 

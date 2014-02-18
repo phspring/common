@@ -87,7 +87,7 @@ class Helper {
                 
             }
         }
-        return null;
+        return $typeName;
     }
 
     public static function __callStatic($name, $arguments) {

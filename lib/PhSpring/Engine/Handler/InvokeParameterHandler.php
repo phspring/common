@@ -98,7 +98,9 @@ class InvokeParameterHandler {
         }
         $matches = null;
         if (preg_match('/@param (\S*) \$' . $parameter->getName() . '/m', $this->reflMethod->getDocComment(), $matches)) {
-            return $matches[1];
+            $types = preg_split('/|/', $matches[1]);
+            $type = array_pop($types);
+            return empty($type)?null:$type;
         }
         return null;
     }
