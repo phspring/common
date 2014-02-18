@@ -9,6 +9,7 @@
 namespace PhSpring\Annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Reflection\Psr0FindFile;
 use Doctrine\Common\Reflection\StaticReflectionParser;
 use ErrorException;
@@ -29,18 +30,22 @@ use Reflector;
 class Helper {
 
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     private static $helper;
 
     /**
-     * @return AnnotationReader
+     * @return Reader
      */
     private static function getHelper() {
         if (self::$helper === null) {
             self::$helper = new AnnotationReader();
         }
         return self::$helper;
+    }
+
+    public static function setHelper(Reader $helper) {
+        self::$helper = $helper;
     }
 
     public static function getPropertyType(ReflectionProperty $property) {
