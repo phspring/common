@@ -10,7 +10,7 @@ namespace PhSpring\Engine;
 
 use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\Autowired;
-use ReflectionClass;
+use \PhSpring\Reflection\ReflectionClass;
 use RuntimeException;
 
 /**
@@ -26,12 +26,15 @@ class ClassInvoker {
      * @return object instance of $reflClass
      * @throws RuntimeException
      */
-    public static function getNewInstanceByRefl(ReflectionClass $reflClass, array $params = null) {
+    public static function getNewInstanceByRefl(\ReflectionClass $reflClass, array $params = null) {
+        if(!($reflClass instanceof ReflectionClass)){
+            $reflClass = new ReflectionClass($reflClass);
+        }
         $instance = $reflClass->newInstanceWithoutConstructor();
         $className = $reflClass->getName();
         foreach ($reflClass->getProperties() as $property) {
-            if (AnnotationHelper::hasAnnotation($property, Autowired::class)) {
-                $annotation = AnnotationHelper::getAnnotation($property, Autowired::class);
+            if ($property->hasAnnotation(Autowired::class)) {
+                $annotation = $property->getAnnotation(Autowired::class);
                 InvokerConfig::getAnnotationHandler(get_class($annotation))->run($property, $instance);
             }
         }
@@ -53,7 +56,7 @@ class ClassInvoker {
      * @throws RuntimeException
      */
     public static function getNewInstance($className, array $params = null) {
-        if ($className instanceof ReflectionClass) {
+        if ($className instanceof \ReflectionClass) {
             return self::getNewInstanceByRefl($className, $params);
         } elseif (is_string($className)) {
             return self::getNewInstanceByRefl(new ReflectionClass($className), $params);

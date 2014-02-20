@@ -14,7 +14,7 @@ use PhSpring\Annotations\RequestParam;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
 use PhSpring\Service\Helper as ServiceHelper;
-use ReflectionMethod;
+use PhSpring\Reflection\ReflectionMethod;
 use ReflectionParameter;
 use RuntimeException;
 

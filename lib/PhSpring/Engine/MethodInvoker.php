@@ -9,9 +9,8 @@
 namespace PhSpring\Engine;
 
 use BadMethodCallException;
-use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Engine\Handler\InvokeParameterHandler;
-use ReflectionClass;
+use PhSpring\Reflection\ReflectionClass;
 
 /**
  * Description of MethodInvoker
@@ -27,7 +26,7 @@ class MethodInvoker {
             throw new BadMethodCallException("The '{$methodName}' method is not exists in {$className}");
         }
         $reflMethod = $reflClass->getMethod($methodName);
-        $annotations = AnnotationHelper::getAnnotations($reflMethod);
+        $annotations = $reflMethod->getAnnotations();
 
         foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod, $annotations) as $methodAnnotationHandler) {
             $methodAnnotationHandler->run($reflMethod, $instance);

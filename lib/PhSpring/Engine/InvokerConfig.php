@@ -8,7 +8,6 @@
 
 namespace PhSpring\Engine;
 
-use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\AccessControl;
 use PhSpring\Annotations\RequestMapping;
 use PhSpring\Engine\ClassInvoker;
@@ -16,6 +15,7 @@ use PhSpring\Engine\Handler\AccessControlHandler;
 use PhSpring\Engine\Handler\RequestMappingHandler;
 use PhSpring\Engine\IRequestHelper;
 use PhSpring\Engine\RequestHelper;
+use PhSpring\Reflection\ReflectionMethod;
 
 /**
  * Description of InvokerConfig
@@ -33,9 +33,9 @@ class InvokerConfig {
     private static $requestHelper;
     private static $annotationHandlerNamespaces = array('PhSpring\Engine\Handler');
 
-    public static function getMethodBeforeHandlers($reflMethod) {
+    public static function getMethodBeforeHandlers(ReflectionMethod $reflMethod) {
         $ret = array();
-        foreach (AnnotationHelper::getAnnotations($reflMethod) as $annotation) {
+        foreach ($reflMethod->getAnnotations() as $annotation) {
             if (array_key_exists(get_class($annotation), self::$beforeHandlers)) {
                 $ret[] = ClassInvoker::getNewInstance(self::$beforeHandlers[get_class($annotation)], array('annotation' => $annotation));
             }
@@ -55,7 +55,7 @@ class InvokerConfig {
 
     /**
      * 
-     * @param \PhSpring\Engine\IRequestHelper $helper
+     * @param IRequestHelper $helper
      */
     public static function setRequestHelper(IRequestHelper $helper) {
         self::$requestHelper = $helper;

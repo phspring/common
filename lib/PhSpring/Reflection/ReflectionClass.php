@@ -37,6 +37,9 @@ class ReflectionClass extends OriginReflectionClass {
     public function __construct($class) {
         if (self::$adapterClass !== null) {
             $this->adapter = new self::$adapterClass($class);
+        }elseif($class instanceof OriginReflectionClass){
+            $this->adapter = $class;
+            self::$adapterClass = get_class($class);
         } else {
             parent::__construct($class);
         }
@@ -121,6 +124,11 @@ class ReflectionClass extends OriginReflectionClass {
         } else {
             throw new InvalidArgumentException("$className must be extend of \ReflectionClass - " . OriginReflectionClass::class);
         }
+    }
+
+    public function setReflectionAdapter(OriginReflectionClass $adapter) {
+        $this->adapter = $adapter;
+        self::$adapterClass = get_class($adapter);
     }
 
     public function __call($name, $arguments) {
