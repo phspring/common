@@ -11,11 +11,13 @@ namespace PhSpring\TestFixtures;
 use PhSpring\TestFixtures\Singleton;
 use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\Qualifier;
+use PhSpring\Annotations\Controller;
 
 /**
  * Description of CLassInvokerFixture
  *
  * @author lobiferi
+ * @Controller
  */
 class ClassInvokerFixture {
 

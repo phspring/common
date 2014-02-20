@@ -27,6 +27,10 @@ spl_autoload_register(function($class) {
     }
 });
 
+define('PHSPRING_TEST_PATH', __DIR__.'/PhSpring');
+define('PHSPRING_FIXTURES_PATH', PHSPRING_TEST_PATH.'/TestFixtures');
+
+
 require_once __DIR__ . "/../vendor/autoload.php";
 
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
