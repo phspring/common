@@ -11,7 +11,7 @@ namespace PhSpring\Service;
 use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\Qualifier;
 use PhSpring\Engine\ClassInvoker;
-use ReflectionClass;
+use PhSpring\Reflection\ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
 
