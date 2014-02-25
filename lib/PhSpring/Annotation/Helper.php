@@ -14,6 +14,7 @@ use Doctrine\Common\Reflection\Psr0FindFile;
 use Doctrine\Common\Reflection\StaticReflectionParser;
 use ErrorException;
 use InvalidArgumentException;
+use PhSpring\Engine\ClassInvoker;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -33,6 +34,12 @@ class Helper {
      * @var Reader
      */
     private static $helper;
+
+    /**
+     *
+     * @var array
+     */
+    private static $annotationHandlerNamespaces = array('PhSpring\Engine\Handler');
 
     /**
      * @return Reader
@@ -120,6 +127,29 @@ class Helper {
             return 'Property';
         }
         throw new InvalidArgumentException("Not supported reflection type");
+    }
+    public static function addAnnotationHandlerNamespace($namespace) {
+        array_unshift(self::$annotationHandlerNamespaces, $namespace);
+    }
+
+    public static function getAnnotationHandler($annotationType) {
+        if (is_object($annotationType)) {
+            $annotationType = get_class($annotationType);
+        }
+        $annotationType = substr($annotationType, strrpos($annotationType, '\\') + 1);
+        $found = false;
+        foreach (self::$annotationHandlerNamespaces as $ns) {
+            $handler = $ns . '\\' . $annotationType . 'Handler';
+            if (class_exists($handler)) {
+                $found = $handler;
+                break;
+            }
+        }
+        if ($found !== false) {
+            return ClassInvoker::getNewInstance($found);
+        } else {
+            return null;
+        }
     }
 
 }

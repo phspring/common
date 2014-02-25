@@ -18,7 +18,7 @@ use PhSpring\Engine\RecursiveArrayObject;
  *
  * @author lobiferi
  */
-class FileAdapter {
+class FileAdapter implements IConfig{
 
     /**
      * @var ArrayAccess

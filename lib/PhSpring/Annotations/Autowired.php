@@ -18,5 +18,6 @@ use PhSpring\Engine\AnnotationAbstract;
  * @Target({"METHOD","PROPERTY"})
  */
 class Autowired extends AnnotationAbstract {
-    public function __construct(array $values) {}
+    public function __construct(array $values) {
+    }
 }

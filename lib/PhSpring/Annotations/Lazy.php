@@ -8,17 +8,15 @@
 
 namespace PhSpring\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Target;
 use PhSpring\Engine\AnnotationAbstract;
+
 /**
- * Description of Controller
+ * Description of Lazy
  *
  * @author lobiferi
  * @Annotation
- * @Target(value="CLASS")
  */
-class Controller extends Component{
-    function __construct() {
-        
+class Lazy extends AnnotationAbstract{
+    public function __construct(array $values) {
     }
 }

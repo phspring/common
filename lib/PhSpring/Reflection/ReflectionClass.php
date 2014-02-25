@@ -30,7 +30,7 @@ class ReflectionClass extends OriginReflectionClass {
 
     /**
      *
-     * @var ReflectionClass
+     * @var \ReflectionClass
      */
     private $adapter = null;
 

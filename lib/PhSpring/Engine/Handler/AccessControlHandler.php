@@ -16,8 +16,8 @@ use PhSpring\Engine\Exceptions\UnAuthorizedException;
 use PhSpring\Engine\IACLResource;
 use PhSpring\Engine\IAuth;
 use PhSpring\Engine\MethodInvoker;
-use ReflectionClass;
-use ReflectionMethod;
+use PhSpring\Reflection\ReflectionClass;
+use PhSpring\Reflection\ReflectionMethod;
 use Reflector;
 
 /**
@@ -64,8 +64,8 @@ class AccessControlHandler implements IAnnotationHandler {
         }
     }
 
-    private function handleAnnotation($reflMethod, $instance) {
-        $annotation = Helper::getAnnotation($reflMethod, AccessControl::class);
+    private function handleAnnotation(ReflectionMethod $reflMethod, $instance) {
+        $annotation = $reflMethod->getAnnotation(AccessControl::class);
         $role = self::getRole();
         if (!$this->acl->isAllowed($role, $annotation->value)) {
             throw new UnAuthorizedException;
@@ -76,7 +76,7 @@ class AccessControlHandler implements IAnnotationHandler {
         $reflClass = new ReflectionClass($instance);
         $throwFurther = true;
         foreach ($reflClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (Helper::hasAnnotation($method, ExceptionHandler::class)) {
+            if ($method->hasAnnotation(ExceptionHandler::class)) {
                 $throwFurther &= MethodInvoker::invoke($instance, $method->getName(), array());
             }
         }

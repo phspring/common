@@ -8,9 +8,11 @@
 
 namespace PhSpring\Engine;
 
+use PhSpring\Annotation\Helper;
 use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\Autowired;
-use \PhSpring\Reflection\ReflectionClass;
+use PhSpring\Annotations\Component;
+use PhSpring\Reflection\ReflectionClass;
 use RuntimeException;
 
 /**
@@ -35,7 +37,7 @@ class ClassInvoker {
         foreach ($reflClass->getProperties() as $property) {
             if ($property->hasAnnotation(Autowired::class)) {
                 $annotation = $property->getAnnotation(Autowired::class);
-                InvokerConfig::getAnnotationHandler(get_class($annotation))->run($property, $instance);
+                Helper::getAnnotationHandler(get_class($annotation))->run($property, $instance);
             }
         }
 
@@ -46,6 +48,7 @@ class ClassInvoker {
                 throw new RuntimeException("The constructor is not public in {$className} class");
             }
         }
+        
         return $instance;
     }
 

@@ -61,28 +61,4 @@ class InvokerConfig {
         self::$requestHelper = $helper;
     }
 
-    public static function addAnnotationHandlerNamespace($namespace) {
-        array_unshift(self::$annotationHandlerNamespaces, $namespace);
-    }
-
-    public static function getAnnotationHandler($annotationType) {
-        if (is_object($annotationType)) {
-            $annotationType = get_class($annotationType);
-        }
-        $annotationType = substr($annotationType, strrpos($annotationType, '\\') + 1);
-        $found = false;
-        foreach (self::$annotationHandlerNamespaces as $ns) {
-            $handler = $ns . '\\' . $annotationType . 'Handler';
-            if (class_exists($handler)) {
-                $found = $handler;
-                break;
-            }
-        }
-        if ($found !== false) {
-            return ClassInvoker::getNewInstance($found);
-        } else {
-            return null;
-        }
-    }
-
 }

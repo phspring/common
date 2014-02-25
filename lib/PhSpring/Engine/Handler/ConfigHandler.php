@@ -6,12 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace PhSpring\Annotations\Handler;
+namespace PhSpring\Engine\Handler;
 
 use PhSpring\Annotations\Config;
 use PhSpring\Annotation\Helper;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\Handler\IAnnotationHandler;
+use PhSpring\Annotations\Autowired;
 
 /**
  * Description of ConfigHandler
@@ -19,10 +20,15 @@ use PhSpring\Engine\Handler\IAnnotationHandler;
  * @author lobiferi
  */
 class ConfigHandler implements IAnnotationHandler {
+    
+    /**
+     * @var PhSpring\Config\IConfig
+     * @Autowired
+     */
+    private $config;
 
     public function run(Reflector $refl, $context) {
         if ($refl instanceof ReflectionProperty) {
-            $config = 
             $annotation = Helper::getAnnotation($refl, Config::class);
             $path = explode('.', $annotation->value);
             while (!empty($path)) {

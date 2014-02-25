@@ -33,7 +33,9 @@ class Collection extends ArrayObject {
 
     public function run($context) {
         foreach ($this as $annotation) {
-            InvokerConfig::getAnnotationHandler($annotation)->run($this->reflector, $context);
+            if ($handler = Helper::getAnnotationHandler($annotation)) {
+                $handler->run($this->reflector, $context);
+            }
         }
     }
 

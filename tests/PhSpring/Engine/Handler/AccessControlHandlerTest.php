@@ -6,7 +6,7 @@ use PhSpring\Annotations\AccessControl;
 use PhSpring\TestFixtures\AccessControlFixture;
 use PhSpring\Engine\IACLResource;
 use PhSpring\Engine\IAuth;
-use ReflectionMethod;
+use PhSpring\Reflection\ReflectionMethod;
 use ReflectionProperty;
 
 /**

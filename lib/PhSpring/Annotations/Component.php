@@ -8,15 +8,29 @@
 
 namespace PhSpring\Annotations;
 
-use PhSpring\Engine\AnnotationAbstract;
+use Doctrine\Common\Annotations\Annotation\Required;
+use PhSpring\Annotations\Autowired;
+use PhSpring\Annotations\Scope;
+use PhSpring\Reflection\ReflectionClass;
 
 /**
  * Description of Component
  *
  * @author lobiferi
- * @Autowired
- * @Target('CLASS')
+ * @Target("CLASS")
+ * @Annotation
+
  */
-class Component extends AnnotationAbstract {
-    //put your code here
+class Component extends Autowired {
+
+    public $scope = Scope::SINGLETON;
+    public $name;
+
+    public function __construct(array $values) {
+        if (array_key_exists('value', $values)) {
+            $this->name = $values['value'];
+        }
+        parent::__construct($values);
+    }
+
 }
