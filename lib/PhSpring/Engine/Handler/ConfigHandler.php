@@ -33,6 +33,7 @@ class ConfigHandler implements IAnnotationHandler {
         if ($refl instanceof ReflectionProperty) {
             $annotation = Helper::getAnnotation($refl, Config::class);
             $path = explode('.', $annotation->value);
+            $config = $this->config;
             while (!empty($path)) {
                 $config = $config->{array_shift($path)};
             }
