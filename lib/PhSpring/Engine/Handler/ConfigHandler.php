@@ -8,11 +8,13 @@
 
 namespace PhSpring\Engine\Handler;
 
-use PhSpring\Annotations\Config;
 use PhSpring\Annotation\Helper;
+use PhSpring\Annotations\Autowired;
+use PhSpring\Annotations\Config;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\Handler\IAnnotationHandler;
-use PhSpring\Annotations\Autowired;
+use ReflectionProperty;
+use Reflector;
 
 /**
  * Description of ConfigHandler
