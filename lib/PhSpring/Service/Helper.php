@@ -130,5 +130,11 @@ class Helper {
     public static function addServiceClass($className) {
         self::addNewServiceInstance($className, false);
     }
+    
+    public static function addServiceBuilderClass($className) {
+        self::addNewServiceInstance($className, false);
+    }
+    
+    
 
 }

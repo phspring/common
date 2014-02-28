@@ -8,10 +8,12 @@
 
 namespace PhSpring\TestFixtures;
 
-use PhSpring\TestFixtures\Singleton;
 use PhSpring\Annotations\Autowired;
-use PhSpring\Annotations\Qualifier;
 use PhSpring\Annotations\Controller;
+use PhSpring\Annotations\Qualifier;
+use PhSpring\Annotations\Valid;
+use PhSpring\Engine\BindingResult;
+use PhSpring\TestFixtures\Form\SimpleForm;
 
 /**
  * Description of CLassInvokerFixture
@@ -27,8 +29,8 @@ class ClassInvokerFixture {
      * @var Singleton
      */
     private $singleton;
-    
     private $settedSingleton;
+
     /**
      * @var Singleton 
      */
@@ -55,6 +57,8 @@ class ClassInvokerFixture {
      * @var integer
      */
     private $id;
+    private $bindingResult;
+    private $form;
 
     /**
      * @param int $id
@@ -84,6 +88,14 @@ class ClassInvokerFixture {
      */
     public function setSingleton(Singleton $singleton) {
         $this->settedSingleton = $singleton;
+    }
+
+    /**
+     * @Valid("form")
+     */
+    public function indexAction(SimpleForm $form, BindingResult $result) {
+        $this->bindingResult = $result;
+        $this->form = $form;
     }
 
 }

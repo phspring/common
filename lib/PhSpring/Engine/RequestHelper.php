@@ -18,12 +18,15 @@ class RequestHelper implements IRequestHelper {
     private $params = array();
 
     public function getParams() {
-        return $this->params + filter_input_array(INPUT_REQUEST);
+        $ret = $this->params;
+        $ret += (array)filter_input_array(INPUT_GET);
+        $ret += (array)filter_input_array(INPUT_POST);
+        return $ret;
     }
 
     public function getParam($key) {
-        if (filter_has_var(INPUT_REQUEST, $key)) {
-            return filter_input(INPUT_REQUEST, $key);
+        if (filter_has_var(INPUT_GET|INPUT_POST, $key)) {
+            return filter_input(INPUT_GET|INPUT_POST, $key);
         } elseif (array_key_exists($key, $this->params)) {
             return $this->params[$key];
         }

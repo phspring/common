@@ -9,14 +9,21 @@
 namespace PhSpring\Engine\Handler;
 
 use PhSpring\Annotation\Collection;
-use PhSpring\Annotations\Autowired;
+use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\RequestParam;
+use PhSpring\Annotations\Valid;
+use PhSpring\Engine\BindingResult;
+use PhSpring\Engine\ClassInvoker;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
-use PhSpring\Service\Helper as ServiceHelper;
+use PhSpring\Engine\RequestHelper;
 use PhSpring\Reflection\ReflectionMethod;
+use PhSpring\Service\Helper as ServiceHelper;
+use ReflectionClass;
 use ReflectionParameter;
+use ReflectionProperty;
 use RuntimeException;
+use Symfony\Component\Validator\ValidatorBuilder;
 
 /**
  * Description of InvokeParameterHandler
@@ -54,17 +61,19 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-//        if ($this->annotations->hasAnnotation(Autowired::class)) {
+
+        $this->invokeValidator();
+
         foreach ($this->reflMethod->getParameters() as $parameter) {
             $this->setupParameterValue($parameter);
         }
-//        }
         return $this->invokeParams;
     }
 
     private function setupParameterValue(ReflectionParameter $parameter) {
         $parameterName = $parameter->getName();
         $type = $this->getParameterType($parameter);
+
         if (array_key_exists($parameterName, $this->args)) {
             $this->invokeParams[$parameter->getPosition()] = $this->args[$parameterName];
             return;
@@ -78,7 +87,6 @@ class InvokeParameterHandler {
         if ($parameter->isOptional()) {
             $this->invokeParams[$parameter->getPosition()] = $parameter->getDefaultValue();
         }
-
 
         if ($isPrimitiveType || $type === null) {
             $this->handleRequestParam($parameter, $this->invokeParams);
@@ -100,7 +108,7 @@ class InvokeParameterHandler {
         if (preg_match('/@param (\S*) \$' . $parameter->getName() . '/m', $this->reflMethod->getDocComment(), $matches)) {
             $types = preg_split('/|/', $matches[1]);
             $type = array_pop($types);
-            return empty($type)?null:$type;
+            return empty($type) ? null : $type;
         }
         return null;
     }
@@ -133,6 +141,56 @@ class InvokeParameterHandler {
                 $requestHelper->setParam($parameterName, $parameter->getDefaultValue());
             }
         }
+    }
+
+    private function invokeValidator() {
+        if ($this->annotations->hasAnnotation(Valid::class)) {
+            $params = $this->reflMethod->getParameters();
+            $valid = $this->annotations->getAnnotation(Valid::class);
+            foreach ($params as $parameter) {
+                if ($parameter->getName() === $valid->value) {
+                    break;
+                }
+            }
+
+            $type = $this->getParameterType($parameter);
+            $this->invokeParams[$parameter->getPosition()] = ServiceHelper::getService($type);
+            $this->fillForm($this->invokeParams[$parameter->getPosition()]);
+            foreach ($params as $param) {
+                if ($param->getClass() && $param->getClass()->getName() === BindingResult::class) {
+                    $bind = ServiceHelper::getService(BindingResult::class);
+                    $builder = new ValidatorBuilder();
+                    $builder->enableAnnotationMapping();
+                    $result = $builder->getValidator()->validate($this->invokeParams[$parameter->getPosition()]);
+                    $this->invokeParams[$param->getPosition()] = $bind->setResult($result);
+                }
+            }
+        }
+    }
+
+    private function fillForm($form, $request = null) {
+        $class = new ReflectionClass($form);
+        if ($request === null) {
+            $requestHelper = InvokerConfig::getRequestHelper();
+            $request = $requestHelper->getParams();
+        }
+        /* @var $property ReflectionProperty */
+        foreach ($class->getProperties() as $property) {
+            $value = array_key_exists($property->getName(), $request) ? $request[$property->getName()] : null;
+            $type = AnnotationHelper::getPropertyType($property);
+            if (is_array($value) && $type !== 'array') {
+                $value = $this->fillForm(ClassInvoker::getNewInstance($type), $value);
+            }
+            $this->setFormFieldValue($property, $form, $value);
+        }
+        return $form;
+    }
+
+    private function setFormFieldValue(ReflectionProperty $property, $form, $value) {
+        if (!$property->isPublic()) {
+            $property->setAccessible(true);
+        }
+        $property->setValue($form, $value);
     }
 
 }

@@ -94,7 +94,7 @@ class Helper {
                 
             }
         }
-        return $typeName;
+        return strtolower($typeName);
     }
 
     public static function __callStatic($name, $arguments) {

@@ -16,6 +16,7 @@ use PhSpring\Engine\Handler\RequestMappingHandler;
 use PhSpring\Engine\IRequestHelper;
 use PhSpring\Engine\RequestHelper;
 use PhSpring\Reflection\ReflectionMethod;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * Description of InvokerConfig
@@ -27,6 +28,7 @@ class InvokerConfig {
     private static $beforeHandlers = array(
         AccessControl::class => AccessControlHandler::class,
         RequestMapping::class => RequestMappingHandler::class,
+        Valid::class => ValidHandler::class,
     );
     private static $afterHandlers = array(
     );

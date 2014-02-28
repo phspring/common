@@ -27,8 +27,8 @@ spl_autoload_register(function($class) {
     }
 });
 
-define('PHSPRING_TEST_PATH', __DIR__.'/PhSpring');
-define('PHSPRING_FIXTURES_PATH', PHSPRING_TEST_PATH.'/TestFixtures');
+define('PHSPRING_TEST_PATH', __DIR__ . '/PhSpring');
+define('PHSPRING_FIXTURES_PATH', PHSPRING_TEST_PATH . '/TestFixtures');
 
 
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -38,4 +38,11 @@ require_once __DIR__ . "/../vendor/autoload.php";
 );
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
         'PhSpring\Annotations', __DIR__ . '/../lib/'
+);
+
+$dir = dirname((new \ReflectionClass('Symfony\Component\Validator\Constraints\Valid'))->getFileName());
+
+\Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
+        "Symfony\Component\Validator\Constraints", 
+        str_replace("Symfony/Component/Validator/Constraints", '', $dir)
 );
