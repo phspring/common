@@ -36,6 +36,9 @@ require_once __DIR__ . "/../vendor/autoload.php";
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
         'Doctrine\Tests\Common\Annotations\Fixtures', __DIR__ . '/../../'
 );
+
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
+/*
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
         'PhSpring\Annotations', __DIR__ . '/../lib/'
 );
@@ -46,3 +49,4 @@ $dir = dirname((new \ReflectionClass('Symfony\Component\Validator\Constraints\Va
         "Symfony\Component\Validator\Constraints", 
         str_replace("Symfony/Component/Validator/Constraints", '', $dir)
 );
+*/

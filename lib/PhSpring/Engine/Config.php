@@ -18,15 +18,16 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 class Config {
 
     public static function init() {
-        $path = str_replace(str_replace('\\', DIRECTORY_SEPARATOR, __NAMESPACE__), '', __DIR__);
+        AnnotationRegistry::registerLoader('class_exists');
+/*        $path = str_replace(str_replace('\\', DIRECTORY_SEPARATOR, __NAMESPACE__), '', __DIR__);
         AnnotationRegistry::registerAutoloadNamespace("PhSpring\Annotations", $path);
 
         $pathSymfony = str_replace("Symfony/Component/Validator/Constraints", '', dirname((new \ReflectionClass('Symfony\Component\Validator\Constraints\Valid'))->getFileName()));
         AnnotationRegistry::registerAutoloadNamespace("Symfony\Component\Validator\Constraints", $pathSymfony);
-    }
+*/    }
 
     public static function addAnnotationNamespace($ns, $path) {
-        AnnotationRegistry::registerAutoloadNamespace($ns, $path);
+        //AnnotationRegistry::registerAutoloadNamespace($ns, $path);
     }
 
 }
