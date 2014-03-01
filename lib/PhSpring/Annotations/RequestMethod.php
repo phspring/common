@@ -23,8 +23,9 @@ class RequestMethod {
     const PUT = 8;
     const PATCH = 16;
     const DELET = 32;
-    const XMLHTTPREQUEST = 64;
-    const ALL = 127;
+    const OPTIONS = 64;
+    const XMLHTTPREQUEST = 128;
+    const ALL = 255;
 
     public static function valid($value) {
         return !!(self::ALL & $value);

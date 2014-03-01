@@ -8,6 +8,8 @@
 
 namespace PhSpring\Engine\Adapter;
 
+use PhSpring\Engine\InvokerConfig;
+
 /**
  * Description of Request
  *
@@ -16,14 +18,15 @@ namespace PhSpring\Engine\Adapter;
 class Request implements RequestInterface {
 
     public function getParam($key, $default = null) {
-        if (filter_has_var(INPUT_GET | INPUT_POST, $key)) {
-            return filter_input(INPUT_GET | INPUT_POST, $key);
+        $value = InvokerConfig::getRequestHelper()->getParam($key);
+        if($value !== null){
+            return $value;
         }
         return $default;
     }
 
     public function getParams() {
-        return filter_input_array(INPUT_GET | INPUT_POST);
+        return InvokerConfig::getRequestHelper()->getParams();
     }
 
 }

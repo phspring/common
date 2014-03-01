@@ -8,15 +8,10 @@
 
 namespace PhSpring\Engine\Handler;
 
-use PhSpring\Annotations\ExpressionAnd;
-use PhSpring\Annotations\ExpressionNot;
-use PhSpring\Annotations\ExpressionOr;
-use PhSpring\Annotations\IExpression;
-use PhSpring\Annotations\RequestMethod;
 use PhSpring\Engine\ErrorCode;
 use PhSpring\Engine\Exceptions\UnSupportedRequestException;
+use PhSpring\Engine\RequestMappingHelper;
 use Reflector;
-use UnexpectedValueException;
 
 /**
  * Description of RequestMappingHandler
@@ -32,48 +27,9 @@ class RequestMappingHandler implements IAnnotationHandler {
     }
 
     public function run(Reflector $reflMethod, $context) {
-        $constName = RequestMethod::class . '::' . filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-        if (!defined($constName)) {
-            throw new UnSupportedRequestException("Unknown request method : {$constName}", ErrorCode::REQUESTMAPPINGHANDLER_UNKNOWN_REQUEST_METHOD);
-        }
-        $methodType = constant($constName) | (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') ? RequestMethod::XMLHTTPREQUEST : 0);
-        $checker = function($value)use($methodType, &$checker) {
-            if (is_integer($value)) {
-                return !!($value & $methodType);
-            } elseif ($value instanceof IExpression) {
-                return $this->expression($value, $checker);
-            }
-            throw new UnexpectedValueException("This annotation value is not supported: {$value}", ErrorCode::REQUESTMAPPINGHANDLER_VALUE_IS_NOT_SUPPORTED);
-        };
-        if (!$checker($this->annotation->method)) {
+        if (!RequestMappingHelper::isMatching($this->annotation)) {
             throw new UnSupportedRequestException('The request is not mismatched', ErrorCode::REQUESTMAPPINGHANDLER_UNKNOWN_REQUEST_METHOD);
         }
-    }
-
-    private function expression(IExpression $expression, $checker) {
-        if ($expression instanceof ExpressionAnd) {
-            return $this->expressionAnd($expression, $checker);
-        } elseif ($expression instanceof ExpressionOr) {
-            return $this->expressionOr($expression, $checker);
-        } elseif ($expression instanceof ExpressionNot) {
-            return !$checker($expression->value);
-        }
-    }
-
-    private function expressionAnd(ExpressionAnd $expression, $checker) {
-        $ret = true;
-        foreach ($expression->value as $val) {
-            $ret &= $checker($val);
-        }
-        return !!$ret;
-    }
-
-    private function expressionOr(ExpressionOr $expression, $checker) {
-        $ret = false;
-        foreach ($expression->value as $val) {
-            $ret |= $checker($val);
-        }
-        return !!$ret;
     }
 
 }

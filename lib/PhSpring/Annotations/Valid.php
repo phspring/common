@@ -8,7 +8,8 @@
 
 namespace PhSpring\Annotations;
 
-use PhSpring\Engine\AnnotationAbstract;
+use PhSpring\Engine\ErrorCode;
+use UnexpectedValueException;
 
 /**
  * Description of Valid

@@ -19,14 +19,14 @@ class RequestHelper implements IRequestHelper {
 
     public function getParams() {
         $ret = $this->params;
-        $ret += (array)filter_input_array(INPUT_GET);
-        $ret += (array)filter_input_array(INPUT_POST);
+        $ret += (array) filter_input_array(INPUT_GET);
+        $ret += (array) filter_input_array(INPUT_POST);
         return $ret;
     }
 
     public function getParam($key) {
-        if (filter_has_var(INPUT_GET|INPUT_POST, $key)) {
-            return filter_input(INPUT_GET|INPUT_POST, $key);
+        if (filter_has_var(INPUT_GET | INPUT_POST, $key)) {
+            return filter_input(INPUT_GET | INPUT_POST, $key);
         } elseif (array_key_exists($key, $this->params)) {
             return $this->params[$key];
         }

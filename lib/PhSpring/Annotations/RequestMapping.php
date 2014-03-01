@@ -8,7 +8,6 @@
 
 namespace PhSpring\Annotations;
 
-use Exception;
 use PhSpring\Engine\AnnotationAbstract;
 use PhSpring\Engine\ErrorCode;
 use PhSpring\Engine\Exceptions\UnSupportedRequestException;

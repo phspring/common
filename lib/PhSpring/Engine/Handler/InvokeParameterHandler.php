@@ -61,7 +61,7 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-
+        $this->invokeParams = array_pad($this->invokeParams, count($this->reflMethod->getParameters()), null);
         $this->invokeValidator();
 
         foreach ($this->reflMethod->getParameters() as $parameter) {
@@ -135,9 +135,10 @@ class InvokeParameterHandler {
         $requestHelper = InvokerConfig::getRequestHelper();
         $parameterName = $parameter->getName();
         if ($annotation->required) {
-            if ($requestHelper->getParam($parameterName) === null && !$parameter->isOptional()) {
+            $isOptional = $parameter->isOptional() || $parameter->getDefaultValueConstantName() !== null || $parameter->getDefaultValue() !== null;
+            if ($requestHelper->getParam($parameterName) === null && !$isOptional) {
                 throw new RuntimeException("Parameter not found in the request: {$parameterName}");
-            } elseif ($parameter->isOptional()) {
+            } elseif ($isOptional) {
                 $requestHelper->setParam($parameterName, $parameter->getDefaultValue());
             }
         }
@@ -187,10 +188,12 @@ class InvokeParameterHandler {
     }
 
     private function setFormFieldValue(ReflectionProperty $property, $form, $value) {
-        if (!$property->isPublic()) {
-            $property->setAccessible(true);
+        if ($value !== null) {
+            if (!$property->isPublic()) {
+                $property->setAccessible(true);
+            }
+            $property->setValue($form, $value);
         }
-        $property->setValue($form, $value);
     }
 
 }

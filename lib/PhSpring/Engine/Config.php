@@ -20,7 +20,9 @@ class Config {
     public static function init() {
         $path = str_replace(str_replace('\\', DIRECTORY_SEPARATOR, __NAMESPACE__), '', __DIR__);
         AnnotationRegistry::registerAutoloadNamespace("PhSpring\Annotations", $path);
-        AnnotationRegistry::registerAutoloadNamespace("Symfony\Component\Validator\Constraints", dirname((new \ReflectionClass('Symfony\Component\Validator\Constraints\Valid'))->getFileName()));
+
+        $pathSymfony = str_replace("Symfony/Component/Validator/Constraints", '', dirname((new \ReflectionClass('Symfony\Component\Validator\Constraints\Valid'))->getFileName()));
+        AnnotationRegistry::registerAutoloadNamespace("Symfony\Component\Validator\Constraints", $pathSymfony);
     }
 
     public static function addAnnotationNamespace($ns, $path) {
