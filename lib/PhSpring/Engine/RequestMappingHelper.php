@@ -13,6 +13,7 @@ use PhSpring\Annotations\ExpressionNot;
 use PhSpring\Annotations\ExpressionOr;
 use PhSpring\Annotations\IExpression;
 use PhSpring\Annotations\RequestMapping;
+use PhSpring\Annotations\RequestMethod;
 use PhSpring\Reflection\ReflectionClass;
 use PhSpring\Reflection\ReflectionMethod;
 use PhSpring\Service\Helper;
@@ -27,6 +28,12 @@ class RequestMappingHelper {
 
     public static function isMatching(RequestMapping $annotation) {
         $methodType = Helper::getService(HttpServletRequest::class)->getMethod();
+        if (!is_int($methodType)) {
+            /* @var $request IRequestHelper */
+            $request = Helper::getService(IRequestHelper::class);
+            $methodType = constant(RequestMethod::class . '::' . strtoupper($methodType)) | ($request->isXmlHttpRequest() ? RequestMethod::XMLHTTPREQUEST : 0);
+        }
+
         $checker = function($value)use($methodType, &$checker) {
             if (is_integer($value)) {
                 return !!($value & $methodType);
