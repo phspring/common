@@ -50,94 +50,47 @@ class HttpServletRequest implements RequestInterface {
     }
 
     public function getMethod() {
-        //return ($this->getHeader('X_REQUESTED_WITH') == 'XMLHttpRequest');
-        $constName = (RequestMethod::class . '::' . strtoupper($this->getServer(self::REQUEST_METHOD)));
-        if (!defined($constName)) {
-            throw new UnSupportedRequestException("Unknown request method: '{$constName}'", ErrorCode::REQUESTMAPPING_UNKNOWN_REQUEST_METHOD);
-        }
-        return constant($constName) | ($this->getServer(self::HTTP_X_REQUESTED_WITH) ? RequestMethod::XMLHTTPREQUEST : 0);
+        return $this->getAdapter()->getMethod();
     }
 
     public function getServer($key = null, $default = null) {
-        if (null === $key) {
-            return filter_input_array(INPUT_SERVER);
-        }
-
-        return filter_has_var(INPUT_SERVER, $key) ? filter_input(INPUT_SERVER, $key) : $default;
+        return $this->getAdapter()->getServer($key, $default);
     }
 
-    /**
-     * Was the request made by POST?
-     *
-     * @return boolean
-     */
-    public function isPost() {
-        return !!(RequestMethod::POST & $this->getMethod());
-    }
-
-    /**
-     * Was the request made by GET?
-     *
-     * @return boolean
-     */
-    public function isGet() {
-        return !!(RequestMethod::GET & $this->getMethod());
-    }
-
-    /**
-     * Was the request made by PUT?
-     *
-     * @return boolean
-     */
-    public function isPut() {
-        return !!(RequestMethod::PUT & $this->getMethod());
-    }
-
-    /**
-     * Was the request made by DELETE?
-     *
-     * @return boolean
-     */
     public function isDelete() {
-        return !!(RequestMethod::DELETE & $this->getMethod());
+        return $this->getAdapter()->isDelete();
     }
 
-    /**
-     * Was the request made by HEAD?
-     *
-     * @return boolean
-     */
+    public function isGet() {
+        return $this->getAdapter()->isGet();
+    }
+
     public function isHead() {
-        return !!(RequestMethod::HEAD & $this->getMethod());
+        return $this->getAdapter()->isHead();
     }
 
-    /**
-     * Was the request made by OPTIONS?
-     *
-     * @return boolean
-     */
     public function isOptions() {
-        return !!(RequestMethod::OPTIONS & $this->getMethod());
+        return $this->getAdapter()->isOptions();
     }
 
-    /**
-     * Is the request a Javascript XMLHttpRequest?
-     *
-     * Should work with Prototype/Script.aculo.us, possibly others.
-     *
-     * @return boolean
-     */
-    public function isXmlHttpRequest() {
-        return !!(RequestMethod::XMLHTTPREQUEST & $this->getMethod());
+    public function isPost() {
+        return $this->getAdapter()->isPost();
     }
 
-    /**
-     * Is https secure request
-     *
-     * @return boolean
-     */
+    public function isPut() {
+        return $this->getAdapter()->isPut();
+    }
+
     public function isSecure() {
-        return ($this->getServer(self::HTTPS) === 'on');
+        return $this->getAdapter()->isSecure();
+    }
+
+    public function isXmlHttpRequest() {
+        return $this->getAdapter()->isXmlHttpRequest();
+    }
+
+    public function setParam($key, $value) {
+        return $this->getAdapter()->setParam($key, $value);
     }
 
 }

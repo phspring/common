@@ -20,6 +20,7 @@ use PhSpring\Engine\RequestHelper;
 use PhSpring\Reflection\ReflectionMethod;
 use PhSpring\Service\Helper as ServiceHelper;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionParameter;
 use ReflectionProperty;
 use RuntimeException;
@@ -45,6 +46,12 @@ class InvokeParameterHandler {
     private $invokeParams = array();
 
     /**
+     *
+     * @var array
+     */
+    private $handledParams = array();
+
+    /**
      * 
      * @param array $annotations
      * @param ReflectionMethod $reflMethod
@@ -61,16 +68,20 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-        $this->invokeParams = array_pad($this->invokeParams, count($this->reflMethod->getParameters()), null);
+        //$this->invokeParams = array_pad($this->invokeParams, count($this->reflMethod->getParameters()), null);
         $this->invokeValidator();
 
         foreach ($this->reflMethod->getParameters() as $parameter) {
             $this->setupParameterValue($parameter);
         }
+        ksort($this->invokeParams);
         return $this->invokeParams;
     }
 
     private function setupParameterValue(ReflectionParameter $parameter) {
+        if(in_array($parameter->getPosition(), $this->handledParams, true)){
+            return;
+        }
         $parameterName = $parameter->getName();
         $type = $this->getParameterType($parameter);
 
@@ -135,7 +146,18 @@ class InvokeParameterHandler {
         $requestHelper = InvokerConfig::getRequestHelper();
         $parameterName = $parameter->getName();
         if ($annotation->required) {
-            $isOptional = $parameter->isOptional() || $parameter->getDefaultValueConstantName() !== null || $parameter->getDefaultValue() !== null;
+            $isOptional = false;
+            $isOptional |= $parameter->isOptional();
+            try {
+                $isOptional |= $parameter->getDefaultValueConstantName() !== null;
+            } catch (ReflectionException $e) {
+                
+            }
+            try {
+                $isOptional |= $parameter->getDefaultValue() !== null;
+            } catch (ReflectionException $e) {
+                
+            }
             if ($requestHelper->getParam($parameterName) === null && !$isOptional) {
                 throw new RuntimeException("Parameter not found in the request: {$parameterName}");
             } elseif ($isOptional) {
@@ -155,15 +177,17 @@ class InvokeParameterHandler {
             }
 
             $type = $this->getParameterType($parameter);
-            $this->invokeParams[$parameter->getPosition()] = ServiceHelper::getService($type);
-            $this->fillForm($this->invokeParams[$parameter->getPosition()]);
+            $this->invokeParams[$parameter->getPosition()] = $this->fillForm(ClassInvoker::getNewInstance($type));
+            $this->handledParams[] = $parameter->getPosition();
             foreach ($params as $param) {
                 if ($param->getClass() && $param->getClass()->getName() === BindingResult::class) {
-                    $bind = ServiceHelper::getService(BindingResult::class);
+                    $bind = new BindingResult();
                     $builder = new ValidatorBuilder();
                     $builder->enableAnnotationMapping();
                     $result = $builder->getValidator()->validate($this->invokeParams[$parameter->getPosition()]);
-                    $this->invokeParams[$param->getPosition()] = $bind->setResult($result);
+                    $bind->setResult($result);
+                    $this->invokeParams[$param->getPosition()] = $bind;
+                    $this->handledParams[] = $param->getPosition();
                 }
             }
         }

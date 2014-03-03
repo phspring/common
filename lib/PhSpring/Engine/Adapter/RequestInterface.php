@@ -8,25 +8,11 @@
 
 namespace PhSpring\Engine\Adapter;
 
+use PhSpring\Engine\IRequestHelper;
+
 /**
  *
  * @author lobiferi
  */
-interface RequestInterface {
-
-    /**
-     * Get an action parameter
-     *
-     * @param string $key
-     * @param mixed $default Default value to use if key not found
-     * @return mixed
-     */
-    public function getParam($key, $default = null);
-
-    /**
-     * Get all action parameters
-     *
-     * @return array
-     */
-    public function getParams();
+interface RequestInterface extends IRequestHelper{
 }

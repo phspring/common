@@ -8,7 +8,8 @@ use PhSpring\Annotations\ExpressionNot;
 use PhSpring\Annotations\ExpressionOr;
 use PhSpring\Annotations\RequestMapping;
 use PhSpring\Annotations\RequestMethod;
-use PhSpring\Engine\Exceptions\UnSupportedRequestException;
+use PhSpring\Engine\InvokerConfig;
+use PhSpring\TestFixtures\RequestHelperFixture;
 use ReflectionMethod;
 
 /**
@@ -26,8 +27,9 @@ class RequestMappingHandlerTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'dummy';
+        $helper = new RequestHelperFixture();
+        $helper->setMethod(RequestMethod::POST|RequestMethod::XMLHTTPREQUEST);
+        InvokerConfig::setRequestHelper($helper);
     }
 
     protected function getHandlerWithAnnotation($annotation) {
