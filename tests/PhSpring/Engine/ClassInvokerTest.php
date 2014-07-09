@@ -35,7 +35,7 @@ class ClassInvokerTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers PhSpring\Engine\ClassInvoker::getNewInstance
      * @test
-     * @expectedException ReflectionException
+     * @expectedException RuntimeException
      */
     public function theConstructorIsNotPublicByReference() {
         ClassInvoker::getNewInstance(new ReflectionClass(Singleton::class));
