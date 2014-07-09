@@ -12,13 +12,13 @@ use PhSpring\Annotation\Collection;
 use PhSpring\Annotation\Helper as AnnotationHelper;
 use PhSpring\Annotations\RequestParam;
 use PhSpring\Annotations\Valid;
+use PhSpring\Engine\AnnotationAbstract;
+use PhSpring\Engine\BeanFactory;
 use PhSpring\Engine\BindingResult;
 use PhSpring\Engine\ClassInvoker;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
-use PhSpring\Engine\RequestHelper;
 use PhSpring\Reflection\ReflectionMethod;
-use PhSpring\Service\Helper as ServiceHelper;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
@@ -57,10 +57,44 @@ class InvokeParameterHandler {
      * @param ReflectionMethod $reflMethod
      * @param array $args
      */
-    public function __construct(Collection $annotations, ReflectionMethod $reflMethod, array $args = null) {
+    public function __construct(array $annotations, ReflectionMethod $reflMethod, array $args = null) {
         $this->annotations = $annotations;
         $this->reflMethod = $reflMethod;
         $this->args = $args;
+    }
+
+    private function hasAnnotation($annotationType, array $values = null) {
+        foreach ($this->annotations as $annotation) {
+            if ($annotation instanceof $annotationType && $this->checkAnnotationByValue($annotation, $values)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function getAnnotation($annotationType, array $values = null) {
+        foreach ($this->annotations as $annotation) {
+            if ($annotation instanceof $annotationType && $this->checkAnnotationByValue($annotation, $values)) {
+                return $annotation;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 
+     * @param AnnotationAbstract $annotation
+     * @param array $values
+     * @return boolean
+     */
+    private function checkAnnotationByValue(AnnotationAbstract $annotation, array $values = null) {
+        $found = true;
+        if ($values !== null) {
+            foreach ($values as $key => $value) {
+                $found &= $annotation->$key == $value;
+            }
+        }
+        return !!$found;
     }
 
     public function run() {
@@ -79,7 +113,7 @@ class InvokeParameterHandler {
     }
 
     private function setupParameterValue(ReflectionParameter $parameter) {
-        if(in_array($parameter->getPosition(), $this->handledParams, true)){
+        if (in_array($parameter->getPosition(), $this->handledParams, true)) {
             return;
         }
         $parameterName = $parameter->getName();
@@ -102,7 +136,7 @@ class InvokeParameterHandler {
         if ($isPrimitiveType || $type === null) {
             $this->handleRequestParam($parameter, $this->invokeParams);
         } elseif (!$isPrimitiveType && $type) {
-            $this->invokeParams[$parameter->getPosition()] = ServiceHelper::getService($type);
+            $this->invokeParams[$parameter->getPosition()] = BeanFactory::getInstance()->getBean($type);
         }
     }
 
@@ -131,8 +165,8 @@ class InvokeParameterHandler {
      */
     private function handleRequestParam(ReflectionParameter $parameter) {
         $parameterName = $parameter->getName();
-        if ($this->annotations->hasAnnotation(RequestParam::class, array('value' => $parameterName))) {
-            $annotation = $this->annotations->getAnnotation(RequestParam::class, array('value' => $parameterName));
+        if ($this->hasAnnotation(RequestParam::class, array('value' => $parameterName))) {
+            $annotation = $this->getAnnotation(RequestParam::class, array('value' => $parameterName));
             $this->handleRequiredRequestParam($parameter, $annotation);
             $value = InvokerConfig::getRequestHelper()->getParam($parameterName);
             if ($annotation->defaultValue !== '****UNDEFINED****' && $value === null) {
@@ -167,9 +201,9 @@ class InvokeParameterHandler {
     }
 
     private function invokeValidator() {
-        if ($this->annotations->hasAnnotation(Valid::class)) {
+        if ($this->hasAnnotation(Valid::class)) {
             $params = $this->reflMethod->getParameters();
-            $valid = $this->annotations->getAnnotation(Valid::class);
+            $valid = $this->getAnnotation(Valid::class);
             foreach ($params as $parameter) {
                 if ($parameter->getName() === $valid->value) {
                     break;

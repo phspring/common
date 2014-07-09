@@ -54,6 +54,15 @@ class ClassInvokerFixture {
     private $singleton5;
 
     /**
+     * @var array
+     */
+    private $array;
+
+    /**
+     * @var int
+     */
+    private $int;
+    /**
      * @var integer
      */
     private $id;

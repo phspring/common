@@ -36,94 +36,13 @@ class HelperTest extends PHPUnit_Framework_TestCase {
     protected function tearDown() {
         
     }
-
-    /**
-     * @covers PhSpring\Service\Helper::getService
-     * @todo   Implement testGetService().
-     */
-    public function testGetSingletonService() {
-        $service = Helper::getService(ComponentFixture::class);
-        $this->assertInstanceOf(ComponentFixture::class, $service);
-        $service2 = Helper::getService(ComponentFixture::class);
-        $this->assertInstanceOf(ComponentFixture::class, $service2);
-        $this->assertTrue($service === $service2);
-    }
-
-    /**
-     * @covers PhSpring\Service\Helper::getService
-     * @todo   Implement testGetService().
-     */
-    public function testGetPrototypeService() {
-        $service = Helper::getService(PrototypeComponentFixture::class);
-        $this->assertInstanceOf(PrototypeComponentFixture::class, $service);
-        $service2 = Helper::getService(PrototypeComponentFixture::class);
-        $this->assertInstanceOf(PrototypeComponentFixture::class, $service2);
-        $this->assertTrue($service !== $service2);
-    }
-
+    
     /**
      * @test
      */
-    public function addNamedLazyComponent() {
-        Helper::addServiceClass(LazyComponent::class);
-
-        $service1 = Helper::getService(LazyComponent::class);
-        $this->assertNotNull($service1);
-        $this->assertInstanceOf(LazyComponent::class, $service1);
-
-        $service2 = Helper::getService('lazyComponent');
-        $this->assertNotNull($service2);
-        $this->assertInstanceOf(LazyComponent::class, $service2);
-
-        $this->assertTrue($service2 == $service1);
+    public function doNothing(){
+        $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     */
-    public function addNamedLazyPrototypeComponent() {
-        Helper::addServiceClass(LazyPrototypeComponent::class);
-
-        $service1 = Helper::getService(LazyPrototypeComponent::class);
-        $this->assertNotNull($service1);
-        $this->assertInstanceOf(LazyPrototypeComponent::class, $service1);
-
-        $service2 = Helper::getService('lazyProtoComponent');
-        $this->assertNotNull($service2);
-        $this->assertInstanceOf(LazyPrototypeComponent::class, $service2);
-        $this->assertTrue($service1 !== $service2);
-    }
-
-    /**
-     * @test
-     * @expectedException PhSpring\Service\NoSuchBeanDefinitionException
-     */
-    public function getMultiple() {
-        Helper::addServiceClass(FirstImplementationOfInterface::class);
-        Helper::addServiceClass(SecondImplementationOfInterface::class);
-
-        $service10 = Helper::getService(FirstImplementationOfInterface::class);
-        $this->assertNotNull($service10);
-        $this->assertInstanceOf(FirstImplementationOfInterface::class, $service10);
-
-        $service11 = Helper::getService('first');
-        $this->assertNotNull($service11);
-        $this->assertInstanceOf(FirstImplementationOfInterface::class, $service11);
-
-        $service20 = Helper::getService(SecondImplementationOfInterface::class);
-        $this->assertNotNull($service20);
-        $this->assertInstanceOf(SecondImplementationOfInterface::class, $service20);
-
-        $service21 = Helper::getService(SecondImplementationOfInterface::class);
-        $this->assertNotNull($service21);
-        $this->assertInstanceOf(SecondImplementationOfInterface::class, $service21);
-
-        $this->assertTrue($service10 !== $service20);
-        $this->assertTrue($service10 === $service11);
-        $this->assertTrue($service11 !== $service21);
-        $this->assertTrue($service20 === $service21);
-
-        Helper::getService(ComponentInterface::class);
-    }
 
 }

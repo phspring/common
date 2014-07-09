@@ -26,14 +26,13 @@ use ReflectionMethod as PHP_ReflectionMethod;
  */
 class RequestMappingHelper {
 
+    /**
+     * 
+     * @param \PhSpring\Annotations\RequestMapping $annotation
+     * @return boolean
+     */
     public static function isMatching(RequestMapping $annotation) {
-        $methodType = Helper::getService(HttpServletRequest::class)->getMethod();
-        if (!is_int($methodType)) {
-            /* @var $request IRequestHelper */
-            $request = Helper::getService(IRequestHelper::class);
-            $methodType = constant(RequestMethod::class . '::' . strtoupper($methodType)) | ($request->isXmlHttpRequest() ? RequestMethod::XMLHTTPREQUEST : 0);
-        }
-
+        $methodType = self::getRequestMethodType();
         $checker = function($value)use($methodType, &$checker) {
             if (is_integer($value)) {
                 return !!($value & $methodType);
@@ -45,15 +44,20 @@ class RequestMappingHelper {
         return $checker($annotation->method);
     }
 
+    /**
+     * @param object|class $controller
+     * @return string Name of matchig method
+     */
     public static function getMatchingMethod($controller) {
-        $class = new ReflectionClass($controller);
-        $classAnnotation = $class->getAnnotation(RequestMapping::class);
+        $reflClass = new ReflectionClass($controller);
+        $classAnnotation = $reflClass->getAnnotation(RequestMapping::class);
+        $requestHelper = Helper::getService(HttpServletRequest::class);
+        $pathInfo = $requestHelper->getServer(HttpServletRequest::PATH_INFO)?$requestHelper->getServer(HttpServletRequest::PATH_INFO):$requestHelper->getServer('SCRIPT_URL');
         /* @var $reflMethod ReflectionMethod */
-        foreach ($class->getMethods(PHP_ReflectionMethod::IS_PUBLIC) as $reflMethod) {
+        foreach ($reflClass->getMethods(PHP_ReflectionMethod::IS_PUBLIC) as $reflMethod) {
             /* @var $methodAnnotation RequestMapping */
             $methodAnnotation = $reflMethod->getAnnotation(RequestMapping::class);
             /* @var $requestHelper HttpServletRequest */
-            $requestHelper = Helper::getService(HttpServletRequest::class);
             $url = '';
             if ($classAnnotation) {
                 $url .= $classAnnotation->value;
@@ -62,13 +66,35 @@ class RequestMappingHelper {
                 $url .= $methodAnnotation->value;
             }
             $regexp = '/^' . str_replace('/', '\\/', $url) . '/';
-            if ($url && $methodAnnotation && $classAnnotation && preg_match($regexp, $requestHelper->getServer(HttpServletRequest::PATH_INFO)) && self::isMatching($methodAnnotation)) {
+            $test = preg_match($regexp, $pathInfo);
+            $test &= $methodAnnotation && self::isMatching($methodAnnotation);
+            if ($url && $methodAnnotation && $test) {
                 return $reflMethod->getName();
+                die($reflMethod->getName());
             }
         }
         return null;
     }
 
+    /**
+     * @return integer Integer representation of request type
+     */
+    private static function getRequestMethodType() {
+        $methodType = Helper::getService(HttpServletRequest::class)->getMethod();
+        if (!is_int($methodType)) {
+            /* @var $request IRequestHelper */
+            $request = Helper::getService(IRequestHelper::class);
+            $methodType = constant(RequestMethod::class . '::' . strtoupper($methodType)) | ($request->isXmlHttpRequest() ? RequestMethod::XMLHTTPREQUEST : 0);
+        }
+        return $methodType;
+    }
+
+    /**
+     * 
+     * @param \PhSpring\Annotations\IExpression $expression
+     * @param Clouser $checker
+     * @return boolean
+     */
     private static function expression(IExpression $expression, $checker) {
         if ($expression instanceof ExpressionAnd) {
             return self::expressionAnd($expression, $checker);
@@ -79,6 +105,12 @@ class RequestMappingHelper {
         }
     }
 
+    /**
+     * 
+     * @param \PhSpring\Annotations\ExpressionAnd $expression
+     * @param Clouser $checker
+     * @return boolean
+     */
     private static function expressionAnd(ExpressionAnd $expression, $checker) {
         $ret = true;
         foreach ($expression->value as $val) {
@@ -87,6 +119,12 @@ class RequestMappingHelper {
         return !!$ret;
     }
 
+    /**
+     * 
+     * @param \PhSpring\Annotations\ExpressionOr $expression
+     * @param Clouser $checker
+     * @return boolean
+     */
     private static function expressionOr(ExpressionOr $expression, $checker) {
         $ret = false;
         foreach ($expression->value as $val) {

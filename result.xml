@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="PhSpring Test Suite" tests="84" assertions="146" failures="1" errors="0" time="0.358906">
+    <testsuite name="PhSpring\Annotation\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/CollectionTest.php" namespace="PhSpring\Annotation" fullPackage="PhSpring.Annotation" tests="4" assertions="14" failures="0" errors="0" time="0.048718">
+      <testcase name="runWithoutAnnotations" class="PhSpring\Annotation\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/CollectionTest.php" line="45" assertions="3" time="0.010209"/>
+      <testcase name="runWithAnnotations" class="PhSpring\Annotation\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/CollectionTest.php" line="56" assertions="3" time="0.028145"/>
+      <testcase name="hasAnnotation" class="PhSpring\Annotation\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/CollectionTest.php" line="67" assertions="4" time="0.005169"/>
+      <testcase name="getAnnotation" class="PhSpring\Annotation\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/CollectionTest.php" line="79" assertions="4" time="0.005195"/>
+    </testsuite>
+    <testsuite name="PhSpring\Annotation\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotation/HelperTest.php" namespace="PhSpring\Annotation" fullPackage="PhSpring.Annotation" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>
+    <testsuite name="PhSpring\Annotations\AnnotationRequirementsTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotations/AnnotationRequirementsTest.php" namespace="PhSpring\Annotations" fullPackage="PhSpring.Annotations" tests="1" assertions="16" failures="0" errors="0" time="0.004918">
+      <testcase name="checkInstanceOf" class="PhSpring\Annotations\AnnotationRequirementsTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotations/AnnotationRequirementsTest.php" line="26" assertions="16" time="0.004918"/>
+    </testsuite>
+    <testsuite name="PhSpring\Annotations\ValidTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotations/ValidTest.php" namespace="PhSpring\Annotations" fullPackage="PhSpring.Annotations" tests="1" assertions="1" failures="0" errors="0" time="0.036523">
+      <testcase name="simpleForm" class="PhSpring\Annotations\ValidTest" file="/var/www/PhSpring/common/tests/PhSpring/Annotations/ValidTest.php" line="18" assertions="1" time="0.036523"/>
+    </testsuite>
+    <testsuite name="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" namespace="PhSpring\Config" fullPackage="PhSpring.Config" tests="5" assertions="4" failures="0" errors="0" time="0.005176">
+      <testcase name="constructWithExistsIni" class="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" line="27" assertions="2" time="0.002037"/>
+      <testcase name="constructWithExistsPhp" class="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" line="38" assertions="0" time="0.000499"/>
+      <testcase name="constructWithNotExistsIni" class="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" line="47" assertions="1" time="0.001361"/>
+      <testcase name="constructWithNotExistsPhp" class="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" line="57" assertions="1" time="0.000875"/>
+      <testcase name="testSetResource" class="PhSpring\Config\FileAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Config/FileAdapterTest.php" line="66" assertions="0" time="0.000404"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" namespace="PhSpring\Engine" fullPackage="PhSpring.Engine" tests="5" assertions="5" failures="1" errors="0" time="0.029567">
+      <testcase name="createBean" class="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" line="44" assertions="1" time="0.000854"/>
+      <testcase name="beanNotFound" class="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" line="55" assertions="1" time="0.006011">
+        <failure type="PHPUnit_Framework_ExpectationFailedException">PhSpring\Engine\BeanFactoryTest::beanNotFound
+Failed asserting that exception of type "PhSpring\Service\NoSuchBeanDefinitionException" is thrown.
+
+</failure>
+      </testcase>
+      <testcase name="beanFound" class="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" line="67" assertions="1" time="0.000433"/>
+      <testcase name="isPrototypeFalse" class="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" line="77" assertions="1" time="0.000773"/>
+      <testcase name="isPrototypeTrue" class="PhSpring\Engine\BeanFactoryTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/BeanFactoryTest.php" line="86" assertions="1" time="0.021496"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\ClassInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/ClassInvokerTest.php" namespace="PhSpring\Engine" fullPackage="PhSpring.Engine" tests="4" assertions="6" failures="0" errors="0" time="0.019328">
+      <testcase name="theConstructorIsNotPublic" class="PhSpring\Engine\ClassInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/ClassInvokerTest.php" line="31" assertions="2" time="0.001963"/>
+      <testcase name="theConstructorIsNotPublicByReference" class="PhSpring\Engine\ClassInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/ClassInvokerTest.php" line="40" assertions="1" time="0.001369"/>
+      <testcase name="validInvokeWithAutowiredProperty" class="PhSpring\Engine\ClassInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/ClassInvokerTest.php" line="46" assertions="1" time="0.015116"/>
+      <testcase name="invokeWithObject" class="PhSpring\Engine\ClassInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/ClassInvokerTest.php" line="59" assertions="2" time="0.000880"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\Handler\AccessControlHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/AccessControlHandlerTest.php" namespace="PhSpring\Engine\Handler" fullPackage="PhSpring.Engine.Handler" tests="3" assertions="4" failures="0" errors="0" time="0.023091">
+      <testcase name="testSetDefaultRole" class="PhSpring\Engine\Handler\AccessControlHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/AccessControlHandlerTest.php" line="46" assertions="1" time="0.006569"/>
+      <testcase name="accessAllowed" class="PhSpring\Engine\Handler\AccessControlHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/AccessControlHandlerTest.php" line="58" assertions="1" time="0.011721"/>
+      <testcase name="accessNotAllowed" class="PhSpring\Engine\Handler\AccessControlHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/AccessControlHandlerTest.php" line="72" assertions="2" time="0.004801"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\Handler\ConfigHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/ConfigHandlerTest.php" namespace="PhSpring\Engine\Handler" fullPackage="PhSpring.Engine.Handler" tests="1" assertions="0" failures="0" errors="0" time="0.000714">
+      <testcase name="testRun" class="PhSpring\Engine\Handler\ConfigHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/ConfigHandlerTest.php" line="28" assertions="0" time="0.000714"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\Handler\InvokeParameterHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/InvokeParameterHandlerTest.php" namespace="PhSpring\Engine\Handler" fullPackage="PhSpring.Engine.Handler" tests="3" assertions="1" failures="0" errors="0" time="0.007843">
+      <testcase name="getRuntimeException" class="PhSpring\Engine\Handler\InvokeParameterHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/InvokeParameterHandlerTest.php" line="63" assertions="1" time="0.004247"/>
+      <testcase name="validWithId" class="PhSpring\Engine\Handler\InvokeParameterHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/InvokeParameterHandlerTest.php" line="74" assertions="0" time="0.001816"/>
+      <testcase name="validWithUndefinedParameter" class="PhSpring\Engine\Handler\InvokeParameterHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/InvokeParameterHandlerTest.php" line="85" assertions="0" time="0.001780"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" namespace="PhSpring\Engine\Handler" fullPackage="PhSpring.Engine.Handler" tests="13" assertions="2" failures="0" errors="0" time="0.013161">
+      <testcase name="checkRunWithSimpleMethodValue" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="52" assertions="0" time="0.005200"/>
+      <testcase name="checkRunWithSimpleMethodValueWithParamName" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="61" assertions="0" time="0.000444"/>
+      <testcase name="checkRunWithMethodValueWithExpressionOrWithGetAndXmlhttprequest" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="70" assertions="0" time="0.000513"/>
+      <testcase name="checkRunWithMethodValueWithExpressionOrWithGetAndXmlhttprequestWithParamName" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="80" assertions="0" time="0.000543"/>
+      <testcase name="checkRunWithMethodValueWithExpressionOrWithGetAndPost" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="90" assertions="0" time="0.000510"/>
+      <testcase name="checkRunWithMethodValueWithExpressionOrWithGetAndPostWithParamName" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="100" assertions="0" time="0.000614"/>
+      <testcase name="checkRunWithMethodValueWithExpressionAndWithGetAndXmlhttprequest" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="110" assertions="0" time="0.000496"/>
+      <testcase name="checkRunWithMethodValueWithExpressionAndWithGetAndXmlhttprequestWithParamName" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="120" assertions="0" time="0.000626"/>
+      <testcase name="checkRunWithMethodValueWithExpressionAndWithGetAndPost" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="130" assertions="0" time="0.000566"/>
+      <testcase name="checkRunWithMethodValueWithExpressionAndWithGetAndPostWithParamName" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="142" assertions="1" time="0.001534"/>
+      <testcase name="checkRunWithMethodValueWithExpressionNotWithPost" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="153" assertions="1" time="0.001008"/>
+      <testcase name="checkRunWithMethodValueWithExpressionNotWithGet" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="163" assertions="0" time="0.000464"/>
+      <testcase name="checkRunWithMethodMultipleExpression" class="PhSpring\Engine\Handler\RequestMappingHandlerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/Handler/RequestMappingHandlerTest.php" line="185" assertions="0" time="0.000643"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\InvokerConfigTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/InvokerConfigTest.php" namespace="PhSpring\Engine" fullPackage="PhSpring.Engine" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>
+    <testsuite name="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" namespace="PhSpring\Engine" fullPackage="PhSpring.Engine" tests="8" assertions="16" failures="0" errors="0" time="0.102548">
+      <testcase name="constructorInvokeWithoutArguments" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="31" assertions="1" time="0.002199"/>
+      <testcase name="constructorInvokeWithArguments" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="44" assertions="1" time="0.001399"/>
+      <testcase name="callMethodWithoutExpectedArguments" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="58" assertions="1" time="0.001972"/>
+      <testcase name="callUndefinedMethod" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="68" assertions="1" time="0.000876"/>
+      <testcase name="successValidation" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="77" assertions="3" time="0.026101"/>
+      <testcase name="validationErrorNotBlankFirstName" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="104" assertions="3" time="0.022628"/>
+      <testcase name="testValidationErrorNotNullAddress" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="129" assertions="3" time="0.019910"/>
+      <testcase name="testValidationErrorNotBlankAddressStreet" class="PhSpring\Engine\MethodInvokerTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/MethodInvokerTest.php" line="154" assertions="3" time="0.027463"/>
+    </testsuite>
+    <testsuite name="PhSpring\Engine\RequestHelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Engine/RequestHelperTest.php" namespace="PhSpring\Engine" fullPackage="PhSpring.Engine" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>
+    <testsuite name="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="7" assertions="12" failures="0" errors="0" time="0.007940">
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="39" assertions="1" time="0.002250"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="47" assertions="2" time="0.001241"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="56" assertions="1" time="0.000964"/>
+      <testcase name="testGetMethod" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="64" assertions="1" time="0.000403"/>
+      <testcase name="testGetMethods" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="72" assertions="3" time="0.001762"/>
+      <testcase name="testGetProperty" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="83" assertions="1" time="0.000416"/>
+      <testcase name="testGetProperties" class="PhSpring\Reflection\ReflectionClassTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassTest.php" line="91" assertions="3" time="0.000904"/>
+    </testsuite>
+    <testsuite name="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="8" assertions="12" failures="0" errors="0" time="0.006423">
+      <testcase name="testGetDocComment" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="36" assertions="0" time="0.000380"/>
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="43" assertions="1" time="0.001113"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="51" assertions="2" time="0.001130"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="60" assertions="1" time="0.001013"/>
+      <testcase name="testGetMethod" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="68" assertions="1" time="0.000467"/>
+      <testcase name="testGetMethods" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="76" assertions="3" time="0.000898"/>
+      <testcase name="testGetProperty" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="87" assertions="1" time="0.000414"/>
+      <testcase name="testGetProperties" class="PhSpring\Reflection\ReflectionClassWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionClassWithExternalAdapterTest.php" line="95" assertions="3" time="0.001008"/>
+    </testsuite>
+    <testsuite name="PhSpring\Reflection\ReflectionMethodTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="4" assertions="6" failures="0" errors="0" time="0.004733">
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionMethodTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodTest.php" line="39" assertions="1" time="0.001380"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionMethodTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodTest.php" line="47" assertions="3" time="0.001541"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionMethodTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodTest.php" line="57" assertions="1" time="0.001428"/>
+      <testcase name="testGetDeclaringClass" class="PhSpring\Reflection\ReflectionMethodTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodTest.php" line="65" assertions="1" time="0.000384"/>
+    </testsuite>
+    <testsuite name="PhSpring\Reflection\ReflectionMethodWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodWithExternalAdapterTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="4" assertions="6" failures="0" errors="0" time="0.004521">
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionMethodWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodWithExternalAdapterTest.php" line="41" assertions="1" time="0.001353"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionMethodWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodWithExternalAdapterTest.php" line="49" assertions="3" time="0.001477"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionMethodWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodWithExternalAdapterTest.php" line="59" assertions="1" time="0.001307"/>
+      <testcase name="testGetDeclaringClass" class="PhSpring\Reflection\ReflectionMethodWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionMethodWithExternalAdapterTest.php" line="67" assertions="1" time="0.000384"/>
+    </testsuite>
+    <testsuite name="PhSpring\Reflection\ReflectionPropertyTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="4" assertions="6" failures="0" errors="0" time="0.004815">
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionPropertyTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyTest.php" line="39" assertions="1" time="0.001474"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionPropertyTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyTest.php" line="48" assertions="3" time="0.001521"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionPropertyTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyTest.php" line="58" assertions="1" time="0.001417"/>
+      <testcase name="testGetDeclaringClass" class="PhSpring\Reflection\ReflectionPropertyTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyTest.php" line="66" assertions="1" time="0.000403"/>
+    </testsuite>
+    <testsuite name="PhSpring\Reflection\ReflectionPropertyWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyWithExternalAdapterTest.php" namespace="PhSpring\Reflection" fullPackage="PhSpring.Reflection" tests="4" assertions="6" failures="0" errors="0" time="0.005167">
+      <testcase name="testGetAnnotation" class="PhSpring\Reflection\ReflectionPropertyWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyWithExternalAdapterTest.php" line="41" assertions="1" time="0.001479"/>
+      <testcase name="testGetAnnotations" class="PhSpring\Reflection\ReflectionPropertyWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyWithExternalAdapterTest.php" line="50" assertions="3" time="0.001767"/>
+      <testcase name="testHasAnnotation" class="PhSpring\Reflection\ReflectionPropertyWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyWithExternalAdapterTest.php" line="60" assertions="1" time="0.001546"/>
+      <testcase name="testGetDeclaringClass" class="PhSpring\Reflection\ReflectionPropertyWithExternalAdapterTest" file="/var/www/PhSpring/common/tests/PhSpring/Reflection/ReflectionPropertyWithExternalAdapterTest.php" line="68" assertions="1" time="0.000375"/>
+    </testsuite>
+    <testsuite name="PhSpring\Service\CollectionTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/CollectionTest.php" namespace="PhSpring\Service" fullPackage="PhSpring.Service" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>
+    <testsuite name="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" namespace="PhSpring\Service" fullPackage="PhSpring.Service" tests="5" assertions="29" failures="0" errors="0" time="0.033721">
+      <testcase name="testGetSingletonService" class="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" line="44" assertions="3" time="0.005085"/>
+      <testcase name="testGetPrototypeService" class="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" line="56" assertions="3" time="0.006148"/>
+      <testcase name="addNamedLazyComponent" class="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" line="67" assertions="5" time="0.005753"/>
+      <testcase name="addNamedLazyPrototypeComponent" class="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" line="84" assertions="5" time="0.007786"/>
+      <testcase name="getMultiple" class="PhSpring\Service\HelperTest" file="/var/www/PhSpring/common/tests/PhSpring/Service/HelperTest.php" line="101" assertions="13" time="0.008949"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

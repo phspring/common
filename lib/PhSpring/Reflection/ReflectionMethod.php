@@ -42,7 +42,7 @@ class ReflectionMethod extends OriginReflectionMethod {
     }
 
     public function getAnnotation($name, $values = null) {
-        return $this->getAnnotations($this)->getAnnotation($name, $values);
+        return Helper::getAnnotation($this,$name, $values);
     }
 
     public function getAnnotations() {

@@ -42,12 +42,12 @@ class ReflectionProperty extends OriginReflectionProperty {
     }
 
     public function getAnnotation($name, $values = null) {
-        return $this->getAnnotations($this)->getAnnotation($name, $values);
+        return Helper::getAnnotation($this,$name, $values);
     }
 
     public function getAnnotations() {
         if ($this->annotations === false) {
-            $this->annotations = Helper::getAnnotations($this);
+            $this->annotations = Helper::getPropertyAnnotations($this);
         }
         return $this->annotations;
     }

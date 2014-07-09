@@ -89,7 +89,7 @@ class RequestHelperFixture implements IRequestHelper {
     }
 
     public function setMethod($method) {
-        $this->isDelete = !!($method & RequestMethod::DELET);
+        $this->isDelete = !!($method & RequestMethod::DELETE);
         $this->isGet = !!($method & RequestMethod::GET);
         $this->isHead = !!($method & RequestMethod::HEAD);
         $this->isOptions = !!($method & RequestMethod::OPTIONS);

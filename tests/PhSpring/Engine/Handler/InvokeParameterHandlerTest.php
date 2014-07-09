@@ -42,8 +42,7 @@ class InvokeParameterHandlerTest extends PHPUnit_Framework_TestCase {
                 new RequestParam(array('value' => 'id'))
             );
         }
-        $collection = new Collection($annotations, $reflMethod);
-        $this->object = new InvokeParameterHandler($collection, $reflMethod);
+        $this->object = new InvokeParameterHandler($annotations, $reflMethod);
     }
 
     /**

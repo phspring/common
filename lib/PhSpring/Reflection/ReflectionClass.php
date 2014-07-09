@@ -8,6 +8,7 @@
 
 namespace PhSpring\Reflection;
 
+use Doctrine\Common\Annotations\PhpParser;
 use InvalidArgumentException;
 use PhSpring\Annotation\Collection;
 use PhSpring\Annotation\Helper;
@@ -30,14 +31,14 @@ class ReflectionClass extends OriginReflectionClass {
 
     /**
      *
-     * @var \ReflectionClass
+     * @var ReflectionClass
      */
     private $adapter = null;
 
     public function __construct($class) {
         if (self::$adapterClass !== null) {
             $this->adapter = new self::$adapterClass($class);
-        }elseif($class instanceof OriginReflectionClass){
+        } elseif ($class instanceof OriginReflectionClass) {
             $this->adapter = $class;
             self::$adapterClass = get_class($class);
         } else {
@@ -52,7 +53,14 @@ class ReflectionClass extends OriginReflectionClass {
      * @return string
      */
     public function getAnnotation($name, $values = null) {
-        return $this->getAnnotations()->getAnnotation($name, $values);
+        return Helper::getAnnotation($this, $name, $values);
+    }
+
+    public function getUseStatements() {
+        if (method_exists('parent', 'getUseStatements')) {
+            return parent::getUseStatements();
+        }
+        return Helper::getUseStatements($this);
     }
 
     /**

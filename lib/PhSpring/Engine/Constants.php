@@ -25,4 +25,17 @@ class Constants {
     const CONTEXT_PARAM_REFL_CLASS = 'context';
     const CONTEXT_PARAM_REFL_METHOD = 'context';
 
+    public static function normalizeType($type) {
+        switch ($type) {
+            case 'int':
+            case 'integer':
+                return 'integer';
+            case 'bool':
+            case 'boolean':
+                return 'boolean';
+            default:
+                return $type;
+        }
+    }
+
 }

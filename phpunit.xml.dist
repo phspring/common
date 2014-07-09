@@ -28,4 +28,5 @@
             <group>performance</group>
         </exclude>
     </groups>
+    
 </phpunit>

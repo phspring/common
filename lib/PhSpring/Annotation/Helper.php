@@ -9,12 +9,12 @@
 namespace PhSpring\Annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\PhpParser;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Reflection\Psr0FindFile;
-use Doctrine\Common\Reflection\StaticReflectionParser;
-use ErrorException;
 use InvalidArgumentException;
+use PhSpring\ApplicationTimer;
 use PhSpring\Engine\ClassInvoker;
+use PhSpring\Engine\Constants;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -55,6 +55,14 @@ class Helper {
         self::$helper = $helper;
     }
 
+    public static function getUseStatements(ReflectionClass $class) {
+        if (method_exists(self::$helper, 'getUseStatements')) {
+            return self::$helper->getUseStatements($class);
+        } else {
+            return (new PhpParser)->parseClass((new \ReflectionClass($class->getName())));
+        }
+    }
+
     public static function getPropertyType(ReflectionProperty $property) {
         if (empty($property->getDocComment())) {
             return null;
@@ -63,43 +71,28 @@ class Helper {
             return null;
         }
         $typeName = preg_split('/\s/', substr($property->getDocComment(), strpos($property->getDocComment(), '@var ') + 5))[0];
-        try {
-            if (class_exists($typeName)) {
-                return $typeName;
-            }
-        } catch (ErrorException $exc) {
-            
+        if (class_exists($typeName) || interface_exists($typeName)) {
+            return $typeName;
         }
-        $className = $property->getDeclaringClass()->getName();
-
-        $dir = substr($property->getDeclaringClass()->getFileName(), 0, -strlen($className) - 4);
-        $firstPart = preg_split('/[\\\\_]/', $className)[0];
-
-        $staticReflectionParser = new StaticReflectionParser($className, new Psr0FindFile(array($firstPart => array($dir))), false);
-        $paths = (array) $staticReflectionParser->getUseStatements();
-        if ($staticReflectionParser->getNamespaceName()) {
-            $paths[] = $staticReflectionParser->getNamespaceName();
+        $paths = self::getUseStatements($property->getDeclaringClass());
+        if ($property->getDeclaringClass()->getNamespaceName()) {
+            $paths[] = $property->getDeclaringClass()->getNamespaceName();
         }
         $paths[] = '';
 
         foreach ($paths as $alias => $path) {
             if (strtolower($alias) == strtolower($typeName)) {
                 return $path;
-            }
-            try {
-                if (class_exists($path . '\\' . $typeName)) {
-                    return $path . '\\' . $typeName;
-                }
-            } catch (ErrorException $exc) {
-                
+            } else if (class_exists($path . '\\' . $typeName) || interface_exists($path . '\\' . $typeName)) {
+                return $path . '\\' . $typeName;
             }
         }
-        return strtolower($typeName);
+        return Constants::normalizeType(strtolower($typeName));
     }
 
     public static function __callStatic($name, $arguments) {
 
-        return new Collection(self::getHelper()->{$name}($arguments[0]), $arguments[0]);
+        return self::getHelper()->{$name}($arguments[0]);
     }
 
     public static function hasAnnotation(Reflector $refl, $annotation, array $values = null) {
@@ -108,7 +101,7 @@ class Helper {
 
     public static function getAnnotation(Reflector $refl, $annotationType, array $values = null) {
         $type = self::getReflectionType($refl);
-        return self::{"get{$type}Annotations"}($refl)->getAnnotation($annotationType, $values);
+        return self::getHelper()->{"get{$type}Annotation"}($refl, $annotationType);//->getAnnotation($annotationType, $values);
     }
 
     public static function getAnnotations(Reflector $refl) {
@@ -128,6 +121,7 @@ class Helper {
         }
         throw new InvalidArgumentException("Not supported reflection type");
     }
+
     public static function addAnnotationHandlerNamespace($namespace) {
         array_unshift(self::$annotationHandlerNamespaces, $namespace);
     }
@@ -138,6 +132,7 @@ class Helper {
         }
         $annotationType = substr($annotationType, strrpos($annotationType, '\\') + 1);
         $found = false;
+        ApplicationTimer::start();
         foreach (self::$annotationHandlerNamespaces as $ns) {
             $handler = $ns . '\\' . $annotationType . 'Handler';
             if (class_exists($handler)) {
@@ -145,6 +140,7 @@ class Helper {
                 break;
             }
         }
+        ApplicationTimer::stop();
         if ($found !== false) {
             return ClassInvoker::getNewInstance($found);
         } else {

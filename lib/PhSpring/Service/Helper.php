@@ -29,7 +29,7 @@ class Helper {
         if (!empty($serviceName)) {
             $service = Collection::get($serviceName);
             if ($service == null) {
-                $this->addService($type, $serviceName);
+                self::addNewServiceInstance($type, $serviceName);
                 throw new RuntimeException("Not defined service! - name: '{$serviceName}'");
             }
             if ($type !== null && !($service instanceof $type)) {

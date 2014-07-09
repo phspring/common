@@ -46,8 +46,8 @@ class ReflectionClassTest extends PHPUnit_Framework_TestCase {
      */
     public function testGetAnnotations() {
         $annotations = $this->object->getAnnotations();
-        $this->assertInstanceOf(Collection::class, $annotations);
-        $this->assertEquals(1,  $annotations->count());
+        $this->assertNotEmpty($annotations);
+        $this->assertEquals(1,  count($annotations));
     }
 
     /**

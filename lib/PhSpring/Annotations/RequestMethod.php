@@ -22,7 +22,7 @@ class RequestMethod {
     const POST = 4;
     const PUT = 8;
     const PATCH = 16;
-    const DELET = 32;
+    const DELETE = 32;
     const OPTIONS = 64;
     const XMLHTTPREQUEST = 128;
     const ALL = 255;

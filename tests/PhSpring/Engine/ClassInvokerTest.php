@@ -35,7 +35,7 @@ class ClassInvokerTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers PhSpring\Engine\ClassInvoker::getNewInstance
      * @test
-     * @expectedException RuntimeException
+     * @expectedException ReflectionException
      */
     public function theConstructorIsNotPublicByReference() {
         ClassInvoker::getNewInstance(new ReflectionClass(Singleton::class));
@@ -44,7 +44,7 @@ class ClassInvokerTest extends PHPUnit_Framework_TestCase {
      * @test
      */
     public function validInvokeWithAutowiredProperty() {
-        Collection::add('SingletonTestService', Singleton::getInstance());
+        BeanFactory::getInstance()->addBeanClass(Singleton::class, 'SingletonTestService');
         $instance = ClassInvoker::getNewInstance(ClassInvokerFixture::class);
         $refl = new ReflectionProperty(ClassInvokerFixture::class, 'singleton');
         $refl->setAccessible(true);

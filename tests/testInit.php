@@ -26,12 +26,15 @@ spl_autoload_register(function($class) {
         return FALSE;
     }
 });
-
-define('PHSPRING_TEST_PATH', __DIR__ . '/PhSpring');
-define('PHSPRING_FIXTURES_PATH', PHSPRING_TEST_PATH . '/TestFixtures');
-
+if (!defined('PHSPRING_TEST_PATH')) {
+    define('PHSPRING_TEST_PATH', __DIR__ . '/PhSpring');
+}
+if (!defined('PHSPRING_FIXTURES_PATH')) {
+    define('PHSPRING_FIXTURES_PATH', PHSPRING_TEST_PATH . '/TestFixtures');
+}
 
 require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "/PHPUnit/Util/Test.php";
 
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
         'Doctrine\Tests\Common\Annotations\Fixtures', __DIR__ . '/../../'

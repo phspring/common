@@ -30,7 +30,7 @@ abstract class AbstractServiceProxy {
         $this->reflClass = $reflClass;
     }
 
-    protected function getReflClass() {
+    public function getReflClass() {
         return $this->reflClass;
     }
     protected function getName() {

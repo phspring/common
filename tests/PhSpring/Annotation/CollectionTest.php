@@ -5,6 +5,7 @@ namespace PhSpring\Annotation;
 use PHPUnit_Framework_TestCase;
 use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\Qualifier;
+use PhSpring\Engine\BeanFactory;
 use PhSpring\TestFixtures\Collection as CollectionFixture;
 use PhSpring\TestFixtures\Singleton;
 use ReflectionProperty;
@@ -30,6 +31,10 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
+        $instance = new ReflectionProperty(BeanFactory::class, 'instance');
+        $instance->setAccessible(true);
+        $instance->setValue(null);
+        BeanFactory::setAutoLoadSupport(true);
         $this->property = new ReflectionProperty(CollectionFixture::class, 'arrayObject');
     }
 

@@ -28,7 +28,7 @@ class MethodInvoker {
         $reflMethod = $reflClass->getMethod($methodName);
         $annotations = $reflMethod->getAnnotations();
 
-        foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod, $annotations) as $methodAnnotationHandler) {
+        foreach (InvokerConfig::getMethodBeforeHandlers($reflMethod) as $methodAnnotationHandler) {
             $methodAnnotationHandler->run($reflMethod, $instance);
         }
         $expectedParameterSize = sizeof($reflMethod->getParameters());

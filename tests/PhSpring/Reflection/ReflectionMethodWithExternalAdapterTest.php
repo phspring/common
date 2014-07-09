@@ -48,9 +48,8 @@ class ReflectionMethodWithExternalAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAnnotations() {
         $annotations = $this->object->getAnnotations();
-        $this->assertInstanceOf(Collection::class, $annotations);
         $this->assertNotEmpty($annotations);
-        $this->assertEquals(2, $annotations->count());
+        $this->assertEquals(2, count($annotations));
     }
 
     /**

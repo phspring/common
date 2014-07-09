@@ -139,7 +139,6 @@ class MethodInvokerTest extends PHPUnit_Framework_TestCase {
         $bindingResultProperty->setAccessible(true);
         /* @var $bindingResult BindingResult */
         $bindingResult = $bindingResultProperty->getValue($instance);
-        var_dump($instance, $bindingResult);
         $this->assertEquals(1, count($bindingResult), (string) $bindingResult);
         
         /* @var $current ConstraintViolation */

@@ -27,7 +27,7 @@ use Reflector;
  */
 class AccessControlHandler implements IAnnotationHandler {
 
-    private static $defaultRole = null;
+    private static $defaultRole = 'guest';
 
     /**
      * @var IAuth
