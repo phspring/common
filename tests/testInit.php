@@ -34,7 +34,7 @@ if (!defined('PHSPRING_FIXTURES_PATH')) {
 }
 
 require_once __DIR__ . "/../vendor/autoload.php";
-require_once __DIR__ . "/PHPUnit/Util/Test.php";
+//require_once __DIR__ . "/PHPUnit/Util/Test.php";
 
 \Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
         'Doctrine\Tests\Common\Annotations\Fixtures', __DIR__ . '/../../'

@@ -18,7 +18,7 @@ use PhSpring\Annotations\Autowired;
 class Collection {
     /**
      *
-     * @var Singleton
+     * @var PhSpring\TestFixtures\Singleton
      * @Autowired
      */
     private $arrayObject;

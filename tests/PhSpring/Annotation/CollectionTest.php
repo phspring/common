@@ -57,7 +57,8 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
         $this->setEnv(array(new Autowired(array())));
         $this->assertTrue($this->property->getValue($this->fixture) === null);
         $this->collection->run($this->fixture);
-        $this->assertTrue($this->property->getValue($this->fixture) === Singleton::getInstance());
+        $val = $this->property->getValue($this->fixture);
+        $this->assertTrue($val === Singleton::getInstance());
     }
 
     /**

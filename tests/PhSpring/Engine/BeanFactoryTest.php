@@ -58,7 +58,7 @@ class BeanFactoryTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers PhSpring\Engine\BeanFactory::getBean
      * @test
-     * @expectedException NoSuchBeanDefinitionException
+     * @expectedException PhSpring\Service\NoSuchBeanDefinitionException
      * @runInSeparateProcess
      */
     public function beanNotFound() {
@@ -157,7 +157,7 @@ class BeanFactoryTest extends PHPUnit_Framework_TestCase {
     /**
      * @test
      * @ignore
-     * @expectedException NoSuchBeanDefinitionException
+     * @expectedException PhSpring\Service\NoSuchBeanDefinitionException
      */
     public function getMultiple() {
         BeanFactory::setAutoLoadSupport(true);
