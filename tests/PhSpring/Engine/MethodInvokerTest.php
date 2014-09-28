@@ -101,7 +101,7 @@ class MethodInvokerTest extends PHPUnit_Framework_TestCase {
     /**
      * @test
      */
-    public function validationErrorNotBlankFirstName() {
+    public function testValidationErrorNotBlankFirstName() {
 
         $request = InvokerConfig::getRequestHelper();
         $request->setParam('firstName', '');

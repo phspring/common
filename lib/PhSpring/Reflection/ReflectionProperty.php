@@ -8,9 +8,10 @@
 
 namespace PhSpring\Reflection;
 
+use InvalidArgumentException;
 use PhSpring\Annotation\Helper;
-use ReflectionProperty as OriginReflectionProperty;
 use ReflectionClass as OriginReflectionClass;
+use ReflectionProperty as OriginReflectionProperty;
 
 /**
  * Description of ReflectionProperty

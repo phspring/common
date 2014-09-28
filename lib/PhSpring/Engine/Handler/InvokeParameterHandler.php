@@ -1,30 +1,23 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace PhSpring\Engine\Handler;
 
-use PhSpring\Annotation\Collection;
-use PhSpring\Annotation\Helper as AnnotationHelper;
+use PhSpring\Annotation\Helper;
 use PhSpring\Annotations\RequestParam;
-use PhSpring\Annotations\Valid;
 use PhSpring\Engine\AnnotationAbstract;
 use PhSpring\Engine\BeanFactory;
 use PhSpring\Engine\BindingResult;
 use PhSpring\Engine\ClassInvoker;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
-use PhSpring\Reflection\ReflectionMethod;
-use ReflectionClass;
+use PhSpring\Reflection\ReflectionClass;
 use ReflectionException;
+use PhSpring\Reflection\ReflectionMethod;
 use ReflectionParameter;
-use ReflectionProperty;
-use RuntimeException;
+use PhSpring\Reflection\ReflectionProperty;
+use PhSpring\Annotations\Valid;
 use Symfony\Component\Validator\ValidatorBuilder;
+use Symfony\Component\Yaml\Exception\RuntimeException;
 
 /**
  * Description of InvokeParameterHandler
@@ -33,7 +26,7 @@ use Symfony\Component\Validator\ValidatorBuilder;
  */
 class InvokeParameterHandler {
 
-    /** @var Collection */
+    /** @var array */
     private $annotations;
 
     /** @var ReflectionMethod  */
@@ -102,7 +95,6 @@ class InvokeParameterHandler {
             $this->args = (array) $this->args;
         }
         $this->invokeParams = array_values($this->args);
-        //$this->invokeParams = array_pad($this->invokeParams, count($this->reflMethod->getParameters()), null);
         $this->invokeValidator();
 
         foreach ($this->reflMethod->getParameters() as $parameter) {
@@ -113,30 +105,32 @@ class InvokeParameterHandler {
     }
 
     private function setupParameterValue(ReflectionParameter $parameter) {
-        if (in_array($parameter->getPosition(), $this->handledParams, true)) {
+        $pos = $parameter->getPosition();
+        if (in_array($pos, $this->handledParams, true)) {
             return;
         }
+
         $parameterName = $parameter->getName();
         $type = $this->getParameterType($parameter);
 
         if (array_key_exists($parameterName, $this->args)) {
-            $this->invokeParams[$parameter->getPosition()] = $this->args[$parameterName];
+            $this->invokeParams[$pos] = $this->args[$parameterName];
             return;
         }
-        if (array_key_exists($parameter->getPosition(), $this->args)) {
-            $this->invokeParams[$parameter->getPosition()] = $this->args[$parameter->getPosition()];
+        if (array_key_exists($pos, $this->args)) {
+            $this->invokeParams[$pos] = $this->args[$pos];
             return;
         }
 
         $isPrimitiveType = (in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
         if ($parameter->isOptional()) {
-            $this->invokeParams[$parameter->getPosition()] = $parameter->getDefaultValue();
+            $this->invokeParams[$pos] = $parameter->getDefaultValue();
         }
 
         if ($isPrimitiveType || $type === null) {
             $this->handleRequestParam($parameter, $this->invokeParams);
         } elseif (!$isPrimitiveType && $type) {
-            $this->invokeParams[$parameter->getPosition()] = BeanFactory::getInstance()->getBean($type);
+            $this->invokeParams[$pos] = BeanFactory::getInstance()->getBean($type);
         }
     }
 
@@ -202,29 +196,33 @@ class InvokeParameterHandler {
 
     private function invokeValidator() {
         if ($this->hasAnnotation(Valid::class)) {
-            $params = $this->reflMethod->getParameters();
             $valid = $this->getAnnotation(Valid::class);
-            foreach ($params as $parameter) {
-                if ($parameter->getName() === $valid->value) {
-                    break;
-                }
-            }
-
+            $params = $this->reflMethod->getParameters();
+            $param = $valid->value;
+            $parameter = current(array_filter($params, function($parameter)use ($param){
+                    return $parameter->getName() == $param;
+            }));
+            $pos = $parameter->getPosition();
             $type = $this->getParameterType($parameter);
-            $this->invokeParams[$parameter->getPosition()] = $this->fillForm(ClassInvoker::getNewInstance($type));
-            $this->handledParams[] = $parameter->getPosition();
+            $this->invokeParams[$pos] = $this->fillForm(ClassInvoker::getNewInstance($type));
+            $this->handledParams[] = $pos;
             foreach ($params as $param) {
                 if ($param->getClass() && $param->getClass()->getName() === BindingResult::class) {
-                    $bind = new BindingResult();
-                    $builder = new ValidatorBuilder();
-                    $builder->enableAnnotationMapping();
-                    $result = $builder->getValidator()->validate($this->invokeParams[$parameter->getPosition()]);
-                    $bind->setResult($result);
-                    $this->invokeParams[$param->getPosition()] = $bind;
-                    $this->handledParams[] = $param->getPosition();
+                    $ppos = $param->getPosition();
+                    $this->invokeParams[$ppos] = $this->bindingResultBuild($this->invokeParams[$pos]);
+                    $this->handledParams[] = $ppos;
                 }
             }
         }
+    }
+
+    private function bindingResultBuild($param) {
+        $bind = new BindingResult();
+        $builder = new ValidatorBuilder();
+        $builder->enableAnnotationMapping();
+        $result = $builder->getValidator()->validate($param);
+        $bind->setResult($result);
+        return $bind;
     }
 
     private function fillForm($form, $request = null) {
@@ -236,7 +234,7 @@ class InvokeParameterHandler {
         /* @var $property ReflectionProperty */
         foreach ($class->getProperties() as $property) {
             $value = array_key_exists($property->getName(), $request) ? $request[$property->getName()] : null;
-            $type = AnnotationHelper::getPropertyType($property);
+            $type = Helper::getPropertyType($property);
             if (is_array($value) && $type !== 'array') {
                 $value = $this->fillForm(ClassInvoker::getNewInstance($type), $value);
             }

@@ -31,7 +31,7 @@ class BindingResult implements IteratorAggregate, Countable, ArrayAccess {
     }
 
     public function count() {
-        return $this->result->count();
+        return $this->result? $this->result->count():0;
     }
 
     public function getIterator() {
@@ -51,11 +51,18 @@ class BindingResult implements IteratorAggregate, Countable, ArrayAccess {
     }
 
     public function offsetUnset($offset) {
-        $this->result->offsetUnset($offset);
+        $this->$this->result->offsetUnset($offset);
     }
 
     public function setResult(ConstraintViolationList $result) {
         $this->result = $result;
+    }
+    
+    private function getResult(){
+        if($this->result===NULL){
+            $this->result = new ConstraintViolationList();
+        }
+        return $this->result;
     }
 
 }

@@ -8,9 +8,7 @@
 
 namespace PhSpring\Reflection;
 
-use Doctrine\Common\Annotations\PhpParser;
 use InvalidArgumentException;
-use PhSpring\Annotation\Collection;
 use PhSpring\Annotation\Helper;
 use ReflectionClass as OriginReflectionClass;
 
@@ -65,7 +63,7 @@ class ReflectionClass extends OriginReflectionClass {
 
     /**
      * 
-     * @return Collection
+     * @return array
      */
     public function getAnnotations() {
         if ($this->annotations === false) {

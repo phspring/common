@@ -8,6 +8,9 @@
 
 namespace PhSpring\Engine;
 
+use PhSpring\Annotations\RequestMethod;
+use PhSpring\Engine\Exceptions\UnSupportedRequestException;
+
 /**
  * Description of RequestHelper
  *

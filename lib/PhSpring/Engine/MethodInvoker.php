@@ -8,9 +8,9 @@
 
 namespace PhSpring\Engine;
 
-use BadMethodCallException;
 use PhSpring\Engine\Handler\InvokeParameterHandler;
 use PhSpring\Reflection\ReflectionClass;
+use Symfony\Component\Validator\Exception\BadMethodCallException;
 
 /**
  * Description of MethodInvoker

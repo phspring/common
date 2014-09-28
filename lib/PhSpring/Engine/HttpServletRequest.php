@@ -50,7 +50,11 @@ class HttpServletRequest implements RequestInterface {
     }
 
     public function getMethod() {
-        return $this->getAdapter()->getMethod();
+        $method = $this->getAdapter()->getMethod();
+        if($method == 'POST' && empty(filter_input_array(INPUT_POST)) && $this->getAdapter()->getServer('CONTENT_LENGTH')){
+            $method = 'PUT'; 
+        }
+        return $method;
     }
 
     public function getServer($key = null, $default = null) {

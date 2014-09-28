@@ -8,9 +8,14 @@
         "php": ">=5.5",
         "doctrine/annotations": "1.*",
         "doctrine/common": "dev-master",
-        "symfony/validator": "dev-master"
+        "symfony/validator": "dev-master",
+        "phpunit/phpunit": "dev-master",
+        "phpunit/php-invoker": "dev-master"
     },
+    "minimum-stability": "dev",
     "autoload": {
-        "psr-4": { "PhSpring\\": "lib/PhSpring/" }
+        "psr-4": {
+            "PhSpring\\": "lib/PhSpring/"
+        }
     }
 }
