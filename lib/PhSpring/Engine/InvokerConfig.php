@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints\Valid;
  * @author lobiferi
  */
 class InvokerConfig {
-
+    const NAMESPACE_SEPARATOR = '\\';
     private static $beforeHandlers = array(
         AccessControl::class => AccessControlHandler::class,
         RequestMapping::class => RequestMappingHandler::class,
@@ -45,11 +45,11 @@ class InvokerConfig {
                 $clazz = self::$beforeHandlers[$aclass];
             }
             if (!$clazz) {
-                $bclass = \explode(\NAMESPACE_SEPARATOR, $aclass);
+                $bclass = \explode(self::NAMESPACE_SEPARATOR, $aclass);
                 $bclass = end($bclass);
                 //die();
                 foreach (self::$annotationHandlerNamespaces as $ns) {
-                    $class = trim($ns, NAMESPACE_SEPARATOR).  NAMESPACE_SEPARATOR . $bclass.'Handler';
+                    $class = trim($ns, self::NAMESPACE_SEPARATOR).  self::NAMESPACE_SEPARATOR . $bclass.'Handler';
                     try {
                         if (class_exists($class)) {
                             $clazz = $class;
