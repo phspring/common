@@ -33,13 +33,36 @@ class InvokerConfig {
     private static $afterHandlers = array(
     );
     private static $requestHelper;
+    private static $responseHelper;
     private static $annotationHandlerNamespaces = array('PhSpring\Engine\Handler');
 
     public static function getMethodBeforeHandlers(ReflectionMethod $reflMethod) {
         $ret = array();
         foreach ($reflMethod->getAnnotations() as $annotation) {
-            if (array_key_exists(get_class($annotation), self::$beforeHandlers)) {
-                $ret[] = ClassInvoker::getNewInstance(self::$beforeHandlers[get_class($annotation)], array('annotation' => $annotation));
+            $clazz = null;
+            $aclass = get_class($annotation);
+            if (array_key_exists($aclass, self::$beforeHandlers)) {
+                $clazz = self::$beforeHandlers[$aclass];
+            }
+            if (!$clazz) {
+                $bclass = \explode(\NAMESPACE_SEPARATOR, $aclass);
+                $bclass = end($bclass);
+                //die();
+                foreach (self::$annotationHandlerNamespaces as $ns) {
+                    $class = trim($ns, NAMESPACE_SEPARATOR).  NAMESPACE_SEPARATOR . $bclass.'Handler';
+                    try {
+                        if (class_exists($class)) {
+                            $clazz = $class;
+                            self::$beforeHandlers[$aclass] = $class;
+                            break;
+                        }
+                    } catch (\Exception $e) {
+                        //do nothing
+                    }
+                }
+            }
+            if ($clazz) {
+                $ret[] = ClassInvoker::getNewInstance($clazz, array('annotation' => $annotation));
             }
         }
         return $ret;
@@ -61,6 +84,24 @@ class InvokerConfig {
      */
     public static function setRequestHelper(IRequestHelper $helper) {
         self::$requestHelper = $helper;
+    }
+
+    /**
+     * @return IResponseHelper
+     */
+    public static function getResponseHelper() {
+        if (self::$responseHelper === null) {
+            self::$responseHelper = new ResponseHelper();
+        }
+        return self::$responseHelper;
+    }
+
+    /**
+     * 
+     * @param IResponseHelper $helper
+     */
+    public static function setResponseHelper(IResponseHelper $helper) {
+        self::$responseHelper = $helper;
     }
 
 }

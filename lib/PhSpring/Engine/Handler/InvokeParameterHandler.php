@@ -3,7 +3,9 @@
 namespace PhSpring\Engine\Handler;
 
 use PhSpring\Annotation\Helper;
+use PhSpring\Annotations\RequestBody;
 use PhSpring\Annotations\RequestParam;
+use PhSpring\Annotations\Valid;
 use PhSpring\Engine\AnnotationAbstract;
 use PhSpring\Engine\BeanFactory;
 use PhSpring\Engine\BindingResult;
@@ -11,11 +13,10 @@ use PhSpring\Engine\ClassInvoker;
 use PhSpring\Engine\Constants;
 use PhSpring\Engine\InvokerConfig;
 use PhSpring\Reflection\ReflectionClass;
-use ReflectionException;
 use PhSpring\Reflection\ReflectionMethod;
-use ReflectionParameter;
 use PhSpring\Reflection\ReflectionProperty;
-use PhSpring\Annotations\Valid;
+use ReflectionException;
+use ReflectionParameter;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\Component\Yaml\Exception\RuntimeException;
 
@@ -161,8 +162,12 @@ class InvokeParameterHandler {
         $parameterName = $parameter->getName();
         if ($this->hasAnnotation(RequestParam::class, array('value' => $parameterName))) {
             $annotation = $this->getAnnotation(RequestParam::class, array('value' => $parameterName));
-            $this->handleRequiredRequestParam($parameter, $annotation);
-            $value = InvokerConfig::getRequestHelper()->getParam($parameterName);
+            if ($annotation instanceof RequestBody) {
+                $value = trim(trim(file_get_contents('php://input'), '"'));
+            } else {
+                $value = InvokerConfig::getRequestHelper()->getParam($parameterName);
+            }
+            $this->handleRequiredRequestParam($parameter, $annotation, $value);
             if ($annotation->defaultValue !== '****UNDEFINED****' && $value === null) {
                 $value = $annotation->defaultValue;
             }
@@ -170,8 +175,7 @@ class InvokeParameterHandler {
         }
     }
 
-    private function handleRequiredRequestParam(ReflectionParameter $parameter, RequestParam $annotation) {
-        $requestHelper = InvokerConfig::getRequestHelper();
+    private function handleRequiredRequestParam(ReflectionParameter $parameter, RequestParam $annotation, $value) {
         $parameterName = $parameter->getName();
         if ($annotation->required) {
             $isOptional = false;
@@ -186,10 +190,8 @@ class InvokeParameterHandler {
             } catch (ReflectionException $e) {
                 
             }
-            if ($requestHelper->getParam($parameterName) === null && !$isOptional) {
+            if ($value === null && !$isOptional) {
                 throw new RuntimeException("Parameter not found in the request: {$parameterName}");
-            } elseif ($isOptional) {
-                $requestHelper->setParam($parameterName, $parameter->getDefaultValue());
             }
         }
     }
@@ -199,9 +201,9 @@ class InvokeParameterHandler {
             $valid = $this->getAnnotation(Valid::class);
             $params = $this->reflMethod->getParameters();
             $param = $valid->value;
-            $parameter = current(array_filter($params, function($parameter)use ($param){
-                    return $parameter->getName() == $param;
-            }));
+            $parameter = current(array_filter($params, function($parameter)use ($param) {
+                        return $parameter->getName() == $param;
+                    }));
             $pos = $parameter->getPosition();
             $type = $this->getParameterType($parameter);
             $this->invokeParams[$pos] = $this->fillForm(ClassInvoker::getNewInstance($type));
