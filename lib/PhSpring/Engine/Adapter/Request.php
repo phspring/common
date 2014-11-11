@@ -16,9 +16,13 @@ use PhSpring\Engine\InvokerConfig;
  * @author lobiferi
  */
 class Request implements RequestInterface {
+    private $helper;
+    public function __construct() {
+        $this->helper = InvokerConfig::getRequestHelper();
+    }
 
     public function getParam($key, $default = null) {
-        $value = InvokerConfig::getRequestHelper()->getParam($key);
+        $value = $this->helper->getParam($key);
         if ($value !== null) {
             return $value;
         }
@@ -26,15 +30,15 @@ class Request implements RequestInterface {
     }
 
     public function getParams() {
-        return InvokerConfig::getRequestHelper()->getParams();
+        return $this->helper->getParams();
     }
 
     public function getMethod() {
-        return InvokerConfig::getRequestHelper()->getMethod();
+        return $this->helper->getMethod();
     }
 
     public function getServer($key = null, $default = null) {
-        return InvokerConfig::getRequestHelper()->getServer($key, $default);
+        return $this->helper->getServer($key, $default);
     }
 
     /**
@@ -43,7 +47,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isPost() {
-        return InvokerConfig::getRequestHelper()->isPost();
+        return $this->helper->isPost();
     }
 
     /**
@@ -52,7 +56,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isGet() {
-        return InvokerConfig::getRequestHelper()->isGet();
+        return $this->helper->isGet();
     }
 
     /**
@@ -61,7 +65,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isPut() {
-        return InvokerConfig::getRequestHelper()->isPut();
+        return $this->helper->isPut();
     }
 
     /**
@@ -70,7 +74,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isDelete() {
-        return InvokerConfig::getRequestHelper()->isDelete();
+        return $this->helper->isDelete();
     }
 
     /**
@@ -79,7 +83,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isHead() {
-        return InvokerConfig::getRequestHelper()->isHead();
+        return $this->helper->isHead();
     }
 
     /**
@@ -88,7 +92,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isOptions() {
-        return InvokerConfig::getRequestHelper()->isOptions();
+        return $this->helper->isOptions();
     }
 
     /**
@@ -99,7 +103,7 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isXmlHttpRequest() {
-        return InvokerConfig::getRequestHelper()->isXmlHttpRequest();
+        return $this->helper->isXmlHttpRequest();
     }
 
     /**
@@ -108,11 +112,11 @@ class Request implements RequestInterface {
      * @return boolean
      */
     public function isSecure() {
-        return InvokerConfig::getRequestHelper()->isSecure();
+        return $this->helper->isSecure();
     }
 
     public function setParam($key, $value) {
-        return InvokerConfig::getRequestHelper()->setParam($key, $value);
+        return $this->helper->setParam($key, $value);
     }
 
 }

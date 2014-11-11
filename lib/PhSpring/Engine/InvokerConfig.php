@@ -94,7 +94,7 @@ class InvokerConfig {
     public static function getResponseHelper() {
         if (self::$responseHelper === null) {
             self::$responseHelper = new ResponseHelper();
-}
+        }
         return self::$responseHelper;
     }
 

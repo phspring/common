@@ -8,39 +8,23 @@
 
 namespace PhSpring\Engine;
 
-use PhSpring\Annotations\RequestMethod;
 use PhSpring\Engine\Adapter\Request;
 use PhSpring\Engine\Adapter\RequestInterface;
-use PhSpring\Engine\Exceptions\UnSupportedRequestException;
 
 /**
  * Description of HttpServletRequest
  *
  * @author lobiferi
  */
-class HttpServletRequest implements RequestInterface {
+class HttpServletRequest extends AbstractAdapter implements RequestInterface {
 
     const PATH_INFO = 'PATH_INFO';
     const HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
     const REQUEST_METHOD = 'REQUEST_METHOD';
     const HTTPS = 'HTTPS';
 
-    private static $adapter;
-
-    /**
-     * @return RequestInterface
-     */
-    private function getAdapter() {
-        if (self::$adapter === null) {
-            self::$adapter = new Request();
-        }
-        return self::$adapter;
-    }
-
-    public static function setAdapter(RequestInterface $adapter) {
-        self::$adapter = $adapter;
-    }
-
+    protected $defaultAdapter = Request::class;
+    
     public function getParam($key, $default = null) {
         return $this->getAdapter()->getParam($key, $default);
     }
@@ -51,8 +35,8 @@ class HttpServletRequest implements RequestInterface {
 
     public function getMethod() {
         $method = $this->getAdapter()->getMethod();
-        if($method == 'POST' && empty(filter_input_array(INPUT_POST)) && $this->getAdapter()->getServer('CONTENT_LENGTH')){
-            $method = 'PUT'; 
+        if ($method == 'POST' && empty(filter_input_array(INPUT_POST)) && $this->getAdapter()->getServer('CONTENT_LENGTH')) {
+            $method = 'PUT';
         }
         return $method;
     }
