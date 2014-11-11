@@ -58,7 +58,6 @@ class BeanFactoryTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers PhSpring\Engine\BeanFactory::getBean
      * @test
-     * @expectedException PhSpring\Service\NoSuchBeanDefinitionException
      * @runInSeparateProcess
      */
     public function beanNotFound() {

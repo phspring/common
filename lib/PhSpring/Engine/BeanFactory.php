@@ -93,14 +93,12 @@ class BeanFactory {
      * @throws BeanDefinitionStoreException - if arguments have been given but the affected bean isn't a prototype
      * @throws BeansException - if the bean could not be created
      */
-    public function getBean($name, $filter = null) {
+    public function getBean($name, $filter = null, $autoload = true) {
         $bean = $this->getBeanObject($name, $filter);
 
-        if ($bean === null && self::$autoLoadSupport && class_exists($name) && !interface_exists($name)) {
+        if ($bean === null && $autoload && class_exists($name) && !interface_exists($name)) {
             $this->addBeanClass($name);
-            self::$autoLoadSupport = false;
-            $bean = $this->getBean($name, $filter);
-            self::$autoLoadSupport = true;
+            $bean = $this->getBean($name, $filter, false);
         }
 
         if ($bean !== null) {
@@ -255,9 +253,9 @@ class BeanFactory {
     }
 
     private function add($beanName, $bean) {
-        $beanName = $this->formatBeanName($beanName);
-        $this->beans[$beanName] = $bean;
-        $this->addAliases($bean, $beanName);
+        $bName = $this->formatBeanName($beanName);
+        $this->beans[$bName] = $bean;
+        $this->addAliases($bean, $bName);
     }
 
     private function addAliases($bean, $beanName) {
@@ -276,11 +274,11 @@ class BeanFactory {
     }
 
     private function addAlias($beanName, $alias) {
-        $alias = $this->formatBeanName($alias);
-        if (!isset($this->aliases[$alias])) {
-            $this->aliases[$alias] = array();
+        $a = $this->formatBeanName($alias);
+        if (!isset($this->aliases[$a])) {
+            $this->aliases[$a] = array();
         }
-        $this->aliases[$alias][] = $beanName;
+        $this->aliases[$a][] = $beanName;
     }
 
     private function addNewServiceInstance($type, $name = null) {

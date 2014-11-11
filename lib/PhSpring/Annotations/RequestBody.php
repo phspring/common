@@ -9,12 +9,12 @@
 namespace PhSpring\Annotations;
 
 /**
- * Description of Service
+ * Description of RequestBody
  *
  * @author lobiferi
  * @Annotation
- * @Target("CLASS")
+ * @Target("METHOD")
  */
-class Service extends Component{
-    //put your code here
+class RequestBody extends RequestParam{
+    
 }

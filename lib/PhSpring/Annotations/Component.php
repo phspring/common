@@ -8,10 +8,9 @@
 
 namespace PhSpring\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Required;
+use Doctrine\Common\Annotations\Annotation\Target;
 use PhSpring\Annotations\Autowired;
 use PhSpring\Annotations\Scope;
-use PhSpring\Reflection\ReflectionClass;
 
 /**
  * Description of Component
@@ -29,6 +28,9 @@ class Component extends Autowired {
     public function __construct(array $values) {
         if (array_key_exists('value', $values)) {
             $this->name = $values['value'];
+        }
+        if (array_key_exists('scope', $values)) {
+            $this->scope = $values['scope'];
         }
         parent::__construct($values);
     }
