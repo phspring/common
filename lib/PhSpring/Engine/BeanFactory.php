@@ -225,7 +225,7 @@ class BeanFactory {
             }
         }
         if (sizeof($instances) > 1) {
-            throw new NoSuchBeanDefinitionException();
+            throw new NoSuchBeanDefinitionException($beanName);
         } elseif (!empty($instances)) {
             return $instances[0];
         }

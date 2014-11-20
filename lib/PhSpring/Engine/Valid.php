@@ -17,4 +17,4 @@ use Doctrine\Common\Annotations\Annotation;
  * @Annotation
  */
 class Valid extends Autowired {
-        }
+}
