@@ -22,9 +22,10 @@ class HttpServletRequest extends AbstractAdapter implements RequestInterface {
     const HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
     const REQUEST_METHOD = 'REQUEST_METHOD';
     const HTTPS = 'HTTPS';
+    const REQUEST_URI = 'REQUEST_URI';
 
     protected $defaultAdapter = Request::class;
-    
+
     public function getParam($key, $default = null) {
         return $this->getAdapter()->getParam($key, $default);
     }
