@@ -52,7 +52,10 @@ class RequestMappingHelper {
         $reflClass = new ReflectionClass($controller);
         $classAnnotation = $reflClass->getAnnotation(RequestMapping::class);
         $requestHelper = Helper::getService(HttpServletRequest::class);
-        $pathInfo = $requestHelper->getServer(HttpServletRequest::PATH_INFO) ? $requestHelper->getServer(HttpServletRequest::PATH_INFO) : $requestHelper->getServer('SCRIPT_URL');
+        $pathInfo = $requestHelper->getServer(HttpServletRequest::PATH_INFO);
+        if (!$pathInfo) {
+            $pathInfo = $requestHelper->getServer(HttpServletRequest::REQUEST_URI);
+        }
         /* @var $reflMethod ReflectionMethod */
         foreach ($reflClass->getMethods(PHP_ReflectionMethod::IS_PUBLIC) as $reflMethod) {
             /* @var $methodAnnotation RequestMapping */
@@ -67,7 +70,7 @@ class RequestMappingHelper {
             }
             $regexp = '/^' . str_replace('/', '\\/', $url) . '/';
             $test = preg_match($regexp, $pathInfo, $prop);
-            $test &= $methodAnnotation && self::isMatching($methodAnnotation);
+            $test &= $methodAnnotation !== null && self::isMatching($methodAnnotation);
             if ($url && $methodAnnotation && $test) {
                 foreach ($prop as $key => $value) {
                     if (!is_numeric($key)) {
