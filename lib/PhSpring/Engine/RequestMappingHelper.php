@@ -35,10 +35,12 @@ class RequestMappingHelper {
         $methodType = self::getRequestMethodType();
         $checker = function($value)use($methodType, &$checker) {
             if (is_integer($value)) {
+                //print_r(array('$value' => $value, '$methodType' => $methodType, '$value & $methodType' => $value & $methodType));
                 return !!($value & $methodType);
             } elseif ($value instanceof IExpression) {
                 return self::expression($value, $checker);
             }
+            //print_r(array('$value' => $value, '$methodType' => $methodType, '$value & $methodType' => $value & $methodType));
             return false;
         };
         return $checker($annotation->method);
