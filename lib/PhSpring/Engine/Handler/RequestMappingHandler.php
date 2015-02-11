@@ -28,7 +28,7 @@ class RequestMappingHandler implements IAnnotationHandler {
 
     public function run(Reflector $reflMethod, $context) {
         if (!RequestMappingHelper::isMatching($this->annotation)) {
-            throw new UnSupportedRequestException('The request is not mismatched', ErrorCode::REQUESTMAPPINGHANDLER_UNKNOWN_REQUEST_METHOD);
+            throw new UnSupportedRequestException('The request is not mismatched:'.PHP_EOL.$reflMethod->getName().PHP_EOL.print_r($this->annotation, true).PHP_EOL.\print_r($_SERVER, true), ErrorCode::REQUESTMAPPINGHANDLER_UNKNOWN_REQUEST_METHOD);
         }
     }
 

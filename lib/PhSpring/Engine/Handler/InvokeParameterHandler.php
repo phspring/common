@@ -177,7 +177,9 @@ class InvokeParameterHandler {
             }
         }
     }
-
+    private function isPrimitive($type) {
+        return(in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
+    }
     private function setupParameterValue(ReflectionParameter $parameter) {
         $pos = $parameter->getPosition();
         if (in_array($pos, $this->handledParams, true)) {
@@ -196,14 +198,14 @@ class InvokeParameterHandler {
             return;
         }
 
-        $isPrimitiveType = (in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
+        
         if ($parameter->isOptional()) {
             $this->invokeParams[$pos] = $parameter->getDefaultValue();
         }
 
-        if ($isPrimitiveType || $type === null) {
+        if ($this->isPrimitive($type) || $type === null) {
             $this->handleRequestParam($parameter, $this->invokeParams);
-        } elseif (!$isPrimitiveType && $type) {
+        } elseif (!$this->isPrimitive($type) && $type) {
             $this->invokeParams[$pos] = BeanFactory::getInstance()->getBean($type);
         }
     }
@@ -315,13 +317,12 @@ class InvokeParameterHandler {
     }
 
     private function fillForm($form, $request = null) {
-
         $class = new ReflectionClass($form);
         /* @var $property ReflectionProperty */
         foreach ($class->getProperties() as $property) {
-            $value = array_key_exists($property->getName(), $request) ? $request[$property->getName()] : null;
+            $value = array_key_exists($property->getName(), (array)$request) ? $request[$property->getName()] : null;
             $type = Helper::getPropertyType($property);
-            if (is_array($value) && $type !== 'array') {
+            if (!$this->isPrimitive($type)) {
                 $value = $this->fillForm(ClassInvoker::getNewInstance($type), $value);
             }
             $this->setFormFieldValue($property, $form, $value);

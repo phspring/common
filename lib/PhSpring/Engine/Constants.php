@@ -15,7 +15,7 @@ namespace PhSpring\Engine;
  */
 class Constants {
 
-    public static $php_default_types = array('int', 'integer', 'bool', 'boolean', 'float', 'double', 'real', 'string', 'array', 'unset');
+    public static $php_default_types = array('int', 'integer', 'bool', 'boolean', 'float', 'double', 'real', 'string', 'array', 'unset', null);
     public static $php_pseudo_types = array('mixed', 'number', 'callback', 'void');
 
     const CONTEXT_PARAM_CONTEXT = 'context';
