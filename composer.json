@@ -17,5 +17,9 @@
         "psr-4": {
             "PhSpring\\": "lib/PhSpring/"
         }
+    },
+    "bin": ["bin/phspring"],
+    "scripts": {
+        "post-install-cmd": ["\\PhSpring\\Composer::addAnnotationNamespaces"]
     }
 }
