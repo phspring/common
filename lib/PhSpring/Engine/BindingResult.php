@@ -8,9 +8,6 @@
 
 namespace PhSpring\Engine;
 
-use ArrayAccess;
-use Countable;
-use IteratorAggregate;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
@@ -18,51 +15,24 @@ use Symfony\Component\Validator\ConstraintViolationList;
  *
  * @author lobiferi
  */
-class BindingResult implements IteratorAggregate, Countable, ArrayAccess {
+class BindingResult extends ConstraintViolationList {
 
     /**
      *
-     * @var ConstraintViolationList
+     * @var array
      */
-    private $result;
+    private $map;
 
-    public function __toString() {
-        return (string) $this->result;
-    }
-
-    public function count() {
-        return $this->result? $this->result->count():0;
-    }
-
-    public function getIterator() {
-        return $this->result->getIterator();
-    }
-
-    public function offsetExists($offset) {
-        return $this->result->offsetExists($offset);
-    }
-
-    public function offsetGet($offset) {
-        return $this->result->offsetGet($offset);
-    }
-
-    public function offsetSet($offset, $violation) {
-        $this->result->offsetSet($offset, $violation);
-    }
-
-    public function offsetUnset($offset) {
-        $this->$this->result->offsetUnset($offset);
-    }
-
-    public function setResult(ConstraintViolationList $result) {
-        $this->result = $result;
-    }
-    
-    private function getResult(){
-        if($this->result===NULL){
-            $this->result = new ConstraintViolationList();
+    /**
+     * @todo Not recursive yet
+     */
+    public function toArray() {
+        $ret = array();
+        foreach ($this as $key => $value) {
+            $ret[$this->map[get_class($value->getRoot())] . '.' . $value->getPropertyPath()] = $value->getMessage();
         }
-        return $this->result;
+
+        return $ret;
     }
 
 }

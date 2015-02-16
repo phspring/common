@@ -20,52 +20,58 @@ namespace PhSpring\Engine;
  * @see org.springframework.web.context.$request->WebRequest#getAttribute
  * @see org.springframework.web.context.$request->WebRequest#removeAttribute
  */
- class DefaultSessionAttributeStore implements SessionAttributeStore {
+class DefaultSessionAttributeStore implements SessionAttributeStore {
 
-	private $attributeNamePrefix = "SessionAttributeStore";
+    private $attributeNamePrefix = "SessionAttributeStore";
 
+    private function initSession() {
+        if (session_status() !== PHP_SESSION_ACTIVE && session_status() !== PHP_SESSION_DISABLED) {
+            session_start();
+        }
+    }
 
-	/**
-	 * Specify a prefix to use for the attribute names in the backend session.
-	 * <p>Default is to use no prefix, storing the session attributes with the
-	 * same name as in the model.
-	 */
-	public function setAttributeNamePrefix($attributeNamePrefix) {
-		$this->attributeNamePrefix = ($attributeNamePrefix != null ? $attributeNamePrefix : "");
-	}
+    /**
+     * Specify a prefix to use for the attribute names in the backend session.
+     * <p>Default is to use no prefix, storing the session attributes with the
+     * same name as in the model.
+     */
+    public function setAttributeNamePrefix($attributeNamePrefix) {
+        $this->attributeNamePrefix = ($attributeNamePrefix != null ? $attributeNamePrefix : "");
+    }
 
-
-	public function storeAttribute($attributeName, $attributeValue) {
+    public function storeAttribute($attributeName, $attributeValue) {
 //		Assert.notNull($request, "WebRequest must not be null");
 //		Assert.notNull($attributeName, "Attribute name must not be null");
 //		Assert.notNull($attributeValue, "Attribute value must not be null");
-                $_SESSION[$this->getAttributeNameInSession($attributeName)] = $attributeValue;
-	}
+        $this->initSession();
+        $_SESSION[$this->getAttributeNameInSession($attributeName)] = $attributeValue;
+    }
 
-	public function retrieveAttribute($attributeName) {
+    public function retrieveAttribute($attributeName) {
 //		Assert.notNull($request, "WebRequest must not be null");
 //		Assert.notNull($attributeName, "Attribute name must not be null");
-                
-		return array_key_exists($this->getAttributeNameInSession($attributeName), $_SESSION)?$_SESSION[$this->getAttributeNameInSession($attributeName)]:null;
-	}
 
-	public function cleanupAttribute($attributeName) {
+        $this->initSession();
+        return array_key_exists($this->getAttributeNameInSession($attributeName), $_SESSION) ? $_SESSION[$this->getAttributeNameInSession($attributeName)] : null;
+    }
+
+    public function cleanupAttribute($attributeName) {
 //		Assert.notNull($request, "WebRequest must not be null");
 //		Assert.notNull($attributeName, "Attribute name must not be null");
-                unset($_SESSION[$this->getAttributeNameInSession($attributeName)]);
-	}
+        $this->initSession();
+        unset($_SESSION[$this->getAttributeNameInSession($attributeName)]);
+    }
 
-
-	/**
-	 * Calculate the attribute name in the backend session.
-	 * <p>The default implementation simply prepends the configured
-	 * {@link #setAttributeNamePrefix "$attributeNamePrefix"}, if any.
-	 * @param $request the current $request
-	 * @param $attributeName the name of the attribute
-	 * @return the attribute name in the backend session
-	 */
-	protected function getAttributeNameInSession($attributeName) {
-		return $this->attributeNamePrefix . $attributeName;
-	}
+    /**
+     * Calculate the attribute name in the backend session.
+     * <p>The default implementation simply prepends the configured
+     * {@link #setAttributeNamePrefix "$attributeNamePrefix"}, if any.
+     * @param $request the current $request
+     * @param $attributeName the name of the attribute
+     * @return the attribute name in the backend session
+     */
+    protected function getAttributeNameInSession($attributeName) {
+        return $this->attributeNamePrefix . $attributeName;
+    }
 
 }
