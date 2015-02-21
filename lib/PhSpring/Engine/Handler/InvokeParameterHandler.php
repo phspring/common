@@ -139,7 +139,7 @@ class InvokeParameterHandler {
                         }));
                 $pos = $parameter->getPosition();
                 $type = $this->getParameterType($parameter);
-                $ptype = explode('\\', $type);
+                $ptype = preg_split('/[\\_]/', $type);
                 $ptype = strtolower(end($ptype));
                 if (array_key_exists($ptype, $request)) {
                     $this->invokeParams[$pos] = $this->fillForm(array_key_exists($param, $this->modelAttributes) && $this->modelAttributes[$param] instanceof $type ? $this->modelAttributes[$param] : ClassInvoker::getNewInstance($type), $request[$ptype]);
@@ -177,9 +177,11 @@ class InvokeParameterHandler {
             }
         }
     }
+
     private function isPrimitive($type) {
         return(in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
     }
+
     private function setupParameterValue(ReflectionParameter $parameter) {
         $pos = $parameter->getPosition();
         if (in_array($pos, $this->handledParams, true)) {
@@ -198,7 +200,7 @@ class InvokeParameterHandler {
             return;
         }
 
-        
+
         if ($parameter->isOptional()) {
             $this->invokeParams[$pos] = $parameter->getDefaultValue();
         }
@@ -289,10 +291,24 @@ class InvokeParameterHandler {
         $builder = new ValidatorBuilder();
         $builder->enableAnnotationMapping();
         foreach ($this->modelAttributes as $param) {
-            foreach ($builder->getValidator()->validate($param) as $offset => $violation) {
-                $bind->offsetSet($offset, $violation);
+            if (in_array($param, $this->invokeParams)) {
+                foreach ($builder->getValidator()->validate($param) as $offset => $violation) {
+                    $bind->offsetSet($offset, $violation);
+                }
             }
         }
+
+        $bindRef = new \ReflectionObject($bind);
+        $propRef = $bindRef->getProperty('map');
+        $propRef->setAccessible(true);
+        $map = array();
+        foreach ($this->reflMethod->getParameters() as $param) {
+            if (!($param instanceof BindingResult) && $param->getClass()) {
+                $map[$param->getClass()->getName()] = $param->getName();
+            }
+        }
+
+        $propRef->setValue($bind, $map);
         return $bind;
     }
 
@@ -320,7 +336,7 @@ class InvokeParameterHandler {
         $class = new ReflectionClass($form);
         /* @var $property ReflectionProperty */
         foreach ($class->getProperties() as $property) {
-            $value = array_key_exists($property->getName(), (array)$request) ? $request[$property->getName()] : null;
+            $value = array_key_exists($property->getName(), (array) $request) ? $request[$property->getName()] : null;
             $type = Helper::getPropertyType($property);
             if (!$this->isPrimitive($type)) {
                 $value = $this->fillForm(ClassInvoker::getNewInstance($type), $value);
