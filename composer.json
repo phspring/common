@@ -1,25 +1,25 @@
 {
-    "name": "phspring/common",
-    "description": "Spring framework implementation in PHP",
-    "keywords": ["dependency injection", "Inversion of Control", "annotation"],
-    "license": "MIT",
-    "author": "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
-    "require": {
-        "php": ">=5.5",
-        "doctrine/annotations": "1.*",
-        "doctrine/common": "dev-master",
-        "symfony/validator": "dev-master",
-        "phpunit/phpunit": "dev-master",
-        "phpunit/php-invoker": "dev-master"
-    },
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-4": {
-            "PhSpring\\": "lib/PhSpring/"
-        }
-    },
-    "bin": ["bin/phspring"],
-    "scripts": {
-        "post-install-cmd": ["\\PhSpring\\Composer::addAnnotationNamespaces"]
+  "name" : "phspring/common",
+  "description" : "Spring framework implementation in PHP",
+  "require" : {
+    "php" : ">=5.5",
+    "doctrine/annotations" : "1.*",
+    "doctrine/common" : "dev-master",
+    "symfony/validator" : "2.7.x-dev",
+    "phpunit/phpunit" : "dev-master",
+    "phpunit/php-invoker" : "dev-master"
+  },
+  "author" : "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
+  "scripts" : {
+    "post-install-cmd" : [ "\\PhSpring\\Composer::addAnnotationNamespaces" ]
+  },
+  "keywords" : [ "dependency injection", "Inversion of Control", "annotation" ],
+  "minimum-stability" : "dev",
+  "autoload" : {
+    "psr-4" : {
+      "PhSpring\\" : "lib/PhSpring/"
     }
+  },
+  "bin" : [ "bin/phspring" ],
+  "license" : "MIT"
 }
