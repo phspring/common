@@ -11,7 +11,9 @@
   },
   "author" : "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
   "scripts" : {
-    "post-install-cmd" : [ "\\PhSpring\\Composer::addAnnotationNamespaces" ]
+    "post-install-cmd" : [ "\\PhSpring\\Composer::addAnnotationNamespaces" ],
+    "post-update-cmd" : [ "\\PhSpring\\Composer::addAnnotationNamespaces" ],
+    "post-package-install" : [ "\\PhSpring\\Composer::addAnnotationNamespaces" ]
   },
   "keywords" : [ "dependency injection", "Inversion of Control", "annotation" ],
   "minimum-stability" : "dev",
