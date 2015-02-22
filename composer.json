@@ -20,6 +20,5 @@
       "PhSpring\\" : "lib/PhSpring/"
     }
   },
-  "bin" : [ "bin/phspring-annotation.js" ],
   "license" : "MIT"
 }
