@@ -18,11 +18,11 @@ class Composer {
         $annotationNamespaces = array();
         $annotationNamespaces['PhSpring\Annotations'] = dirname(dirname(dirname((new \ReflectionClass('PhSpring\Annotations\Config'))->getFileName())));
         $annotationNamespaces['Symfony\Component\Validator'] = dirname(dirname(dirname(dirname(dirname((new \ReflectionClass('Symfony\Component\Validator\Validator\RecursiveValidator'))->getFileName())))));
-        $binDir = dirname(dirname($annotationNamespaces['Symfony\Component\Validator'])).'/bin/phspring';
+        $binDir = getcwd().'/bin';
         if(!is_dir($binDir)){
-            mkdir($binDir);
+            mkdir($binDir, 0755, true);
         }
-        $fh = fopen($binDir.'/annotation.json','w+');
+        $fh = fopen($binDir.'/phspring-annotation.js','w+');
         fwrite($fh, json_encode($annotationNamespaces));
         fclose($fh);
     }
