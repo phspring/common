@@ -20,11 +20,14 @@ use UnexpectedValueException;
  */
 class RequestParam extends Autowired {
 
+    const DEFAULT_VALUE = '****UNDEFINED****';
+
     public $defaultValue = '****UNDEFINED****';
+
     /** @var boolean */
     public $required = true;
     public $value;
-    
+
     public function __construct(array $values) {
         if(!array_key_exists('value', $values)){
             throw new UnexpectedValueException("The 'value' parameter is required!", ErrorCode::REQUESTPARAM_PARAMETER_IS_REQUIRED);
