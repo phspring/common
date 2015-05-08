@@ -5,7 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 namespace PhSpring\Annotations;
 
 use PhSpring\Engine\ErrorCode;
@@ -15,36 +14,40 @@ use UnexpectedValueException;
  * Description of RequestParam
  *
  * @author lobiferi
- * @Annotation
- * @Target("METHOD")
+ *         @Annotation
+ *         @Target("METHOD")
  */
-class RequestParam extends Autowired {
+class RequestParam extends Autowired
+{
 
     const DEFAULT_VALUE = '****UNDEFINED****';
 
     public $defaultValue = '****UNDEFINED****';
 
-    /** @var boolean */
+    /**
+     * @var boolean
+     */
     public $required = true;
+
     public $value;
 
-    public function __construct(array $values) {
-        if(!array_key_exists('value', $values)){
+    public function __construct(array $values)
+    {
+        if (! array_key_exists('value', $values)) {
             throw new UnexpectedValueException("The 'value' parameter is required!", ErrorCode::REQUESTPARAM_PARAMETER_IS_REQUIRED);
         }
-        $this->value = (string)$values['value'];
-        if(array_key_exists('required', $values)){
-            $this->required = (bool)$values['required'];
+        $this->value = (string) $values['value'];
+        if (array_key_exists('required', $values)) {
+            $this->required = (bool) $values['required'];
         }
-        if(array_key_exists('defaultValue', $values)){
-            $this->defaultValue = (string)$values['defaultValue'];
-            if($this->defaultValue === 'true'){
+        if (array_key_exists('defaultValue', $values)) {
+            $this->defaultValue = (string) $values['defaultValue'];
+            if ($this->defaultValue === 'true') {
                 $this->defaultValue = true;
-            }elseif($this->defaultValue === 'false'){
+            } elseif ($this->defaultValue === 'false') {
                 $this->defaultValue = false;
             }
             $this->required = false;
         }
     }
-
 }

@@ -23,10 +23,14 @@ class RequestMapping extends AnnotationAbstract {
     public $value;
     public $method = RequestMethod::ALL;
     public $params;
-
+    public $name;
+    
     public function __construct(array $values) {
-        if (array_key_exists('method', $values)) {
+            if (array_key_exists('method', $values)) {
             $this->setMethod($values['method']);
+        }
+        if (array_key_exists('name', $values)) {
+            $this->name = $values['name'];
         }
         if (array_key_exists('value', $values)) {
             if (is_integer($values['value'])) {
@@ -37,6 +41,7 @@ class RequestMapping extends AnnotationAbstract {
                 $this->value = $values['value'];
             }
         }
+        
         if (array_key_exists('params', $values)) {
             throw new UnexpectedValueException('The \'param\' parameter is not supported yet!', ErrorCode::REQUESTMAPPING_PARAMETER_IS_NOT_SUPPORTED_YET);
         }

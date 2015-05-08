@@ -39,6 +39,7 @@ class ConfigHandler implements IAnnotationHandler {
             }
             $type = Helper::getPropertyType($refl);
             $isPrimitiveType = (in_array($type, Constants::$php_default_types) || in_array($type, Constants::$php_pseudo_types));
+            
             $refl->setAccessible(true);
             if ($type !== null && $isPrimitiveType) {
                 if (gettype($config) === $type) {
