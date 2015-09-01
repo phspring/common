@@ -24,13 +24,21 @@ class RequestMapping extends AnnotationAbstract {
     public $method = RequestMethod::ALL;
     public $params;
     public $name;
+    /**
+     * Only implemented in ZF2
+     * @var object
+     */
+    public $type;
     
     public function __construct(array $values) {
             if (array_key_exists('method', $values)) {
             $this->setMethod($values['method']);
         }
-        if (array_key_exists('name', $values)) {
+            if (array_key_exists('name', $values)) {
             $this->name = $values['name'];
+        }
+        if (array_key_exists('type', $values)) {
+            $this->type = $values['type'];
         }
         if (array_key_exists('value', $values)) {
             if (is_integer($values['value'])) {

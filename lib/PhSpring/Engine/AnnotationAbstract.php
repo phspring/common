@@ -21,7 +21,7 @@ class AnnotationAbstract {
         if (array_key_exists('value', $values)) {
             $this->value = $values['value'];
         } else {
-            throw new UnexpectedValueException('Annotation value is not found',  ErrorCode::ANNOTATIONABSTRACT_VALUE_IS_NOT_FOUND);
+            throw new UnexpectedValueException('Annotation value is not found - ' . get_class($this),  ErrorCode::ANNOTATIONABSTRACT_VALUE_IS_NOT_FOUND);
         }
     }
 

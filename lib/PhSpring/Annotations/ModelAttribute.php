@@ -48,4 +48,9 @@ use PhSpring\Engine\AnnotationAbstract;
  * @Target("METHOD")
  */
 class ModelAttribute extends AnnotationAbstract {
+    public function __construct(array $values) {
+        if (array_key_exists('value', $values)) {
+            $this->value = $values['value'];
+        }
+    }
 }
