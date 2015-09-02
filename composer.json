@@ -6,7 +6,7 @@
     "doctrine/annotations" : "1.*",
     "doctrine/common" : "dev-master",
     "symfony/validator" : "2.7.x-dev",
-    "phpunit/phpunit" : "dev-master",
+    "phpunit/phpunit" : "4.8.x-dev",
     "phpunit/php-invoker" : "dev-master"
   },
   "author" : "Ferenc Lobozar<ferenc.lobozar@gmail.com>",
